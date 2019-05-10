@@ -1,8 +1,6 @@
-import { shuffle } from "./util.js";
+import { shuffle, Box } from "./util.js";
 import { Card } from "./Card.js";
-
-let AngryMob = { cost: 1, power: 1, gold: 0, name: "Angry Mob" };
-let oldFarmer = { cost: 1, power: 0, gold: 1, name: "Old Farmer" };
+import { library } from "./CardLibrary.js";
 
 export class Player {
 	constructor(playerNumber, configData) {
@@ -11,21 +9,22 @@ export class Player {
 		this._hand = [];
 		this._playerNumber = playerNumber;
 		this._playerColor = configData.color;
-		this._x = configData.x;
-		this._y = configData.y;
-		this._w = configData.w;
-		this._h = configData.h;
+		this._box = new Box(configData.x, configData.y, configData.w, configData.h);
 		this._turnState = 0;
 		this._turnGold = 0;
 		this._turnPower = 0;
 		this._cardColor = configData.cardColor;
 
 		for (let j = 0; j < 3; ++j) {
-			this.addToDeck(AngryMob);
+			this.addToDeck(library.angryMob);
 		}
 		for (let j = 0; j < 7; ++j) {
-			this.addToDeck(oldFarmer);
+			this.addToDeck(library.oldFarmer);
 		}
+	}
+
+	get box() {
+		return this._box;
 	}
 
 	get turnGold() {
@@ -44,12 +43,14 @@ export class Player {
 		this._turnPower = value;
 	}
 
-	pickUpCard() {
-		if (this._deck.length == 0) {
-			this._reshuffleDiscard();
+	pickUpCard(value) {
+		for (let i = 0; i < value; ++i) {
+			if (this._deck.length == 0) {
+				this._reshuffleDiscard();
+			}
+			this._hand.push(this._deck[0]);
+			this._deck.splice(0, 1);
 		}
-		this._hand.push(this._deck[0]);
-		this._deck.splice(0, 1);
 	}
 
 	onClick(x, y) {
@@ -57,7 +58,16 @@ export class Player {
 			const cardX = 290 + 40 * i;
 			const cardY = 25;
 
-			if (this._hand[i].contains(x, y, cardX, cardY)) {
+			if (
+				this._hand[i].contains(
+					x,
+					y,
+					cardX,
+					this._hand[i].width,
+					cardY,
+					this._hand[i].height
+				)
+			) {
 				this._hand[i].playCard(this);
 				this.discard(i);
 				break;
@@ -66,13 +76,14 @@ export class Player {
 	}
 
 	discard(index) {
+		console.log;
 		this._discardPile.push(this._hand[index]);
 		this._hand.splice(index, 1);
 	}
 
 	startTurn() {
 		for (let i = this._hand.length; i < 5; ++i) {
-			this.pickUpCard();
+			this.pickUpCard(1);
 		}
 	}
 
@@ -81,14 +92,18 @@ export class Player {
 	}
 
 	_reshuffleDiscard() {
+		console.log(`resuffling deck: ${this._deck}, ${this._discardPile}`);
 		shuffle(this._discardPile);
 		this._deck = this._discardPile;
 		this._discardPile = [];
 	}
 
 	addToDeck(card) {
-		const { cost: cost, power: power, gold: gold, name: name } = card;
-		this._discardPile.push(new Card(cost, power, gold, name));
+		// const { cost: cost, power: power, gold: gold, name: name } = card;
+		this._discardPile.push(card);
+	}
+	addToDiscard(card) {
+		this._discardPile.push(card);
 	}
 	//Player rendering
 

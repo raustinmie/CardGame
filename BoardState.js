@@ -2,6 +2,47 @@ import { Player } from "./Player.js";
 import { library } from "./CardLibrary.js";
 import { Store } from "./Store.js";
 import { Card } from "./Card.js";
+import { Location } from "./Location.js";
+import { Button } from "./util.js";
+
+const locations = [
+	new Location(
+		375,
+		250,
+		"Farm",
+		library.foodCache,
+		library.youngFarmhand,
+		library.millersDaughter,
+		library.starveEmOut
+	),
+	new Location(
+		500,
+		375,
+		"Workshop",
+		library.boilingOil,
+		library.apprentice,
+		library.masterSmith,
+		library.siegeEngine
+	),
+	new Location(
+		250,
+		375,
+		"Abbey",
+		library.friar,
+		library.fasting,
+		library.priest,
+		library.fireAndBrimstone
+	),
+	new Location(
+		375,
+		500,
+		"Castle",
+		library.callToArms,
+		library.squire,
+		library.knight,
+		library.deedOfValor
+	)
+];
 
 const stores = [
 	new Store(175, 175, library.angryMob),
@@ -36,6 +77,15 @@ export class BoardState {
 		return this._running;
 	}
 
+	onHover(x, y) {
+		// for (let store of stores) {
+		// 	store.onClick(x, y, this._currentPlayer);
+		// }
+		for (let location of locations) {
+			location.onHover(x, y);
+		}
+	}
+
 	onClick(x, y) {
 		// TODO: translate x,y to player coords
 		// ---- x and y are variables that are passed in, the variable passed in is xPos and yPos, which is correct
@@ -55,16 +105,22 @@ export class BoardState {
 					x = 800 - y;
 					y = j;
 			}
+
+			// TODO: make sure this is fine
+			this._players[this._playerTurn].onClick(x, y);
 		}
 		// _players[1] x = y, y=-x
 		// _players[2] x = -x, y=-y
 		// _players[3] x = -y, y = x
 
-		this._players[this._playerTurn].onClick(x, y);
-
 		for (let store of stores) {
 			store.onClick(x, y, this._currentPlayer);
 		}
+
+		for (let location of locations) {
+			location.onClick(x, y, this._currentPlayer);
+		}
+		this.endTurnButton.onClick(x, y);
 	}
 
 	get currentPlayer() {
@@ -85,14 +141,24 @@ export class BoardState {
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
 		}
 
-		for (let i = 0; i < stores.length; ++i) {
-			stores[i].draw(ctx, "black");
+		for (let location of locations) {
+			location.draw(ctx);
 		}
+
+		for (let store of stores) {
+			store.draw(ctx, "black");
+		}
+		this.endTurnButton.draw(ctx);
 	}
 
 	nextTurn() {
+		this._currentPlayer.turnGold = 0;
+		this._currentPlayer.turnPower = 0;
 		this._playerTurn = (this._playerTurn + 1) % 4;
 		this._currentPlayer = this._players[this._playerTurn];
 		this._currentPlayer.startTurn();
+		console.log(this._playerTurn);
 	}
+
+	endTurnButton = new Button(5, 5, 50, 15, "End Turn", () => this.nextTurn());
 }

@@ -1,3 +1,7 @@
+export function toggle(boolean) {
+	return !boolean;
+}
+
 export function roll(min, max) {
 	if (max === undefined) {
 		max = min;
@@ -57,5 +61,47 @@ export class Box {
 	}
 	get height() {
 		return this._height;
+	}
+}
+
+export class Button {
+	constructor(x, y, width, height, name, effect) {
+		this._x = x;
+		this._y = y;
+		this._effect = effect;
+		this._width = width;
+		this._height = height;
+		this._name = name;
+		this._box = new Box(x, y, x + width, y + height);
+	}
+
+	onClick(x, y) {
+		if (this._box.contains(x, y)) {
+			console.log("End Turn Button Clicked!");
+			this._effect(x, y);
+		}
+	}
+
+	draw(ctx) {
+		ctx.strokeStyle = "black";
+		ctx.textBaseline = "middle";
+		ctx.textAlign = "center";
+		ctx.font = "12px";
+		ctx.fillStyle = "gray";
+		ctx.fillRect(
+			this._box.left,
+			this._box.top,
+			this._box.width,
+			this._box.height
+		);
+		ctx.strokeRect(
+			this._box.left,
+			this._box.top,
+			this._box.width,
+			this._box.height
+		);
+		//button Name text
+		ctx.fillStyle = "white";
+		ctx.fillText(`${this._name}`, this._box.width / 2, 10);
 	}
 }

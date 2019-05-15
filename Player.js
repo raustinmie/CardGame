@@ -92,7 +92,6 @@ export class Player {
 	}
 
 	_reshuffleDiscard() {
-		console.log(`resuffling deck: ${this._deck}, ${this._discardPile}`);
 		shuffle(this._discardPile);
 		this._deck = this._discardPile;
 		this._discardPile = [];

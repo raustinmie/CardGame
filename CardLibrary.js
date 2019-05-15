@@ -43,10 +43,14 @@ export const library = {
 		gainGold(2, currentPlayer);
 	}),
 	//FARM CARDS
-	foodCache: new Card(2, "Food Cache", "?" /*trash a starvation card*/),
+	foodCache: new Card(2, "Food Cache" /*trash a starvation card*/),
 	youngFarmhand: new Card(4, "Young Farmhand", currentPlayer => {
 		gainPower(1);
 		gainGold(2);
+	}),
+	millersDaughter: new Card(5, "Miller's Daughter", currentPlayer => {
+		gainGold(2);
+		//remove an enemy card from a location
 	}),
 	starveEmOut: new Card(
 		6,
@@ -55,6 +59,17 @@ export const library = {
 	),
 
 	//WORKSHOP CARDS
+	boilingOil: new Card(2, "Boiling Oil", currentPlayer => {
+		gainPower(3); //one use only
+	}),
+	apprentice: new Card(4, "Apprentice", currentPlayer => {
+		gainGold(2);
+		gainPower(2);
+	}),
+	masterSmith: new Card(5, "Master Smith", currentPlayer => {
+		gainGold(3);
+		gainPower(1); //you may draw a card from the discard pile
+	}),
 	siegeEngine: new Card(
 		6,
 		"Siege Engine",

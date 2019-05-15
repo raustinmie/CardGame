@@ -21,8 +21,12 @@ export class Store {
 
 	onClick(x, y, currentPlayer) {
 		if (this._box.contains(x, y)) {
-			console.log(`${this._name} clicked`);
-			currentPlayer.addToDiscard(this._card);
+			if (currentPlayer.turnGold >= this._cost) {
+				currentPlayer.addToDiscard(this._card);
+				currentPlayer.turnGold -= this._cost;
+			} else {
+				alert("Not enough gold!");
+			}
 		}
 	}
 

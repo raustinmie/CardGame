@@ -27,7 +27,11 @@ export class Card {
 	}
 
 	playCard(currentPlayer) {
-		this._effect(currentPlayer);
+		if (this._effect) {
+			this._effect(currentPlayer);
+		} else {
+			console.error("Missing effect");
+		}
 		// currentPlayer.turnGold = currentPlayer.turnGold + this._gold;
 		// currentPlayer.turnPower = currentPlayer.turnPower + this._power;
 		// console.log(`${this._name} played!`);

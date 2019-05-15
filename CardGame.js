@@ -7,21 +7,24 @@ document.addEventListener("DOMContentLoaded", function onLoad(event) {
 
 	// init
 	const state = new BoardState();
+	for (let i = 0; i < state._players.length; ++i) {
+		state.nextTurn();
+	}
 	//	state.draw(ctx);
-
-	document
-		.getElementById("endTurnButton")
-		.addEventListener("click", event => state.nextTurn());
-
 	boardCanvas.addEventListener("click", event => {
 		//console.log(`board clicked ${event.clientX}, ${event.clientY}`);
 		let rect = boardCanvas.getBoundingClientRect();
 		const xPos = event.clientX - rect.left;
 		const yPos = event.clientY - rect.top;
-
 		state.onClick(xPos, yPos);
 	});
-
+	boardCanvas.addEventListener("mousemove", event => {
+		console.log("hi");
+		let rect = boardCanvas.getBoundingClientRect();
+		const xPos = event.clientX - rect.left;
+		const yPos = event.clientY - rect.top;
+		state.onHover(xPos, yPos);
+	});
 	// // start the game
 
 	let lastTime = performance.now();

@@ -19,14 +19,19 @@ export class Store {
 		return this._y;
 	}
 
-	onClick(x, y, currentPlayer) {
+	onClick(x, y, player) {
 		if (this._box.contains(x, y)) {
-			if (currentPlayer.turnGold >= this._cost) {
-				currentPlayer.addToDiscard(this._card);
-				currentPlayer.turnGold -= this._cost;
-			} else {
-				alert("Not enough gold!");
+			for (let i = 0; i < player.hand.length; ++i) {
+				player.activeCards[i] = false;
 			}
+			state.turnState = new BuyState(state);
+			console.log("Buy State");
+			// if (currentPlayer.turnGold >= this._cost) {
+			// 	currentPlayer.addToDiscard(this._card);
+			// 	currentPlayer.turnGold -= this._cost;
+			// } else {
+			// 	alert("Not enough gold!");
+			//}
 		}
 	}
 
@@ -34,7 +39,7 @@ export class Store {
 		ctx.strokeStyle = "black";
 		ctx.fillStyle = "white";
 		ctx.textBaseline = "middle";
-		ctx.textAlign = "center";
+		ctx.textAlign = "left";
 		ctx.font = "12px";
 		ctx.fillStyle = color;
 		//this._box.(ctx)
@@ -50,8 +55,8 @@ export class Store {
 		ctx.save();
 		ctx.translate(this._x, this._y + 75);
 		ctx.rotate((Math.PI * 3) / 2);
-		ctx.fillText(`${this._name}`, 10, 10);
-		ctx.fillText(`${this._cost}`, 0, 40);
+		ctx.fillText(`${this._name}`, 0, 10);
+		ctx.fillText(`${this._cost}`, -10, 40);
 		// ctx.translate(-x, -y);
 		ctx.restore();
 	}

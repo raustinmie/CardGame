@@ -1,36 +1,12 @@
 import { Card } from "./Card.js";
 import { BoardState } from "./BoardState.js";
 
-function minusPower(value, currentPlayer) {
-	currentPlayer.turnPower -= value;
-}
-
-function minusGold(value, currentPlayer) {
-	currentPlayer.turnGold -= value;
-}
-
-function gainPower(value, currentPlayer) {
-	currentPlayer.turnPower += value;
-}
-
-function gainGold(value, currentPlayer) {
-	currentPlayer.turnGold += value;
-}
-
-// function gainPower(value) {
-// 	return function(currentPlayer) {
-// 		return (currentPlayer.power += value);
-// 	};
-//}
+//TODO: revert to gold and power attributes instead of
 
 export const library = {
 	//COMMON CARDS
-	angryMob: new Card(1, "Angry Mob", currentPlayer => {
-		gainPower(1, currentPlayer);
-	}),
-	oldFarmer: new Card(1, "Old Farmer", currentPlayer => {
-		gainGold(1, currentPlayer);
-	}),
+	angryMob: new Card(1, "Angry Mob", 0, 1, null),
+	oldFarmer: new Card(1, "Old Farmer", 1, 0, null),
 	general: new Card(6, "General", currentPlayer => {
 		gainGold(4, currentPlayer);
 		gainPower(4 /*-1 per angry mob*/, currentPlayer);

@@ -19,11 +19,16 @@ document.addEventListener("DOMContentLoaded", function onLoad(event) {
 		state.onClick(xPos, yPos);
 	});
 	boardCanvas.addEventListener("mousemove", event => {
-		console.log("hi");
 		let rect = boardCanvas.getBoundingClientRect();
 		const xPos = event.clientX - rect.left;
 		const yPos = event.clientY - rect.top;
 		state.onHover(xPos, yPos);
+	});
+	boardCanvas.addEventListener("keydown", event => {
+		if (event == 27) {
+			state.turnState = "neutral";
+			console.log(state.turnState);
+		}
 	});
 	// // start the game
 

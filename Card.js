@@ -1,13 +1,23 @@
 export class Card {
-	constructor(cost, name, effect) {
+	constructor(cost, name, gold, power, effect) {
 		this._cost = cost;
 		this._name = name;
-		this.playCard = effect;
 		this._width = 50;
 		this._height = 100;
+		this._gold = gold;
+		this._power = power;
+		this._effect = effect;
 	}
 	contains(x, y, cardX, cardY) {
 		return x >= cardX && x < cardX + 40 && y >= cardY && y < cardY + 100;
+	}
+
+	get gold() {
+		return this._gold;
+	}
+
+	get power() {
+		return this._power;
 	}
 
 	get name() {
@@ -29,7 +39,7 @@ export class Card {
 	playCard(currentPlayer) {
 		if (this._effect) {
 			this._effect(currentPlayer);
-		} else {
+		} else if (this._effect === undefined) {
 			console.error("Missing effect");
 		}
 		// currentPlayer.turnGold = currentPlayer.turnGold + this._gold;
@@ -52,8 +62,8 @@ export class Card {
 		ctx.translate(x, y + 75);
 		ctx.rotate((Math.PI * 3) / 2);
 		ctx.fillText(`${this._name}`, 10, 10);
-		ctx.fillText(`${this._cost}`, 0, 40);
 		// ctx.translate(-x, -y);
 		ctx.restore();
+		ctx.fillText(`C:${this._cost}`, this._x + 10, this._y + 10);
 	}
 }

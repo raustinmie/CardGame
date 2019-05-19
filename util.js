@@ -77,7 +77,7 @@ export class Button {
 
 	onClick(x, y) {
 		if (this._box.contains(x, y)) {
-			console.log("End Turn Button Clicked!");
+			console.log(`${this._name} Button Clicked!`);
 			this._effect(x, y);
 		}
 	}
@@ -102,6 +102,6 @@ export class Button {
 		);
 		//button Name text
 		ctx.fillStyle = "white";
-		ctx.fillText(`${this._name}`, this._box.width / 2, 10);
+		ctx.fillText(`${this._name}`, this._box.left + 20, 10);
 	}
 }

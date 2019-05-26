@@ -2,6 +2,15 @@ import { shuffle, Box, toggle } from "./util.js";
 import { Card } from "./Card.js";
 import { library } from "./CardLibrary.js";
 
+const cardOffset = 40;
+const handOffset = 90;
+const discardPileOffset = 300;
+const deckOffset = 25;
+const activeOffset = 35;
+const verticalOffset = 25;
+const cardOrigin = 255;
+const center = 400;
+
 export class Player {
 	constructor(playerNumber, configData) {
 		this._deck = [];
@@ -16,11 +25,28 @@ export class Player {
 		this._cardColor = configData.cardColor;
 		this._activeCards = [];
 
-		for (let j = 0; j < 5; ++j) {
-			this.addToDeck(library.angryMob);
+		//INITIALIZE: DEAL PLAYER CARDS
+		for (let j = 0; j < 1; ++j) {
+			this.addToDeck(
+				new Card(
+					library.angryMob.cost,
+					library.angryMob.name,
+					library.angryMob.gold,
+					library.angryMob.power,
+					library.angryMob.effect
+				)
+			);
 		}
-		for (let j = 0; j < 5; ++j) {
-			this.addToDeck(library.oldFarmer);
+		for (let j = 0; j < 4; ++j) {
+			this.addToDeck(
+				new Card(
+					library.oldFarmer.cost,
+					library.oldFarmer.name,
+					library.oldFarmer.gold,
+					library.oldFarmer.power,
+					library.oldFarmer.effect
+				)
+			);
 		}
 	}
 
@@ -78,6 +104,12 @@ export class Player {
 		}
 	}
 
+	deactivateCards(player) {
+		for (let i = 0; i < player.hand.length; ++i) {
+			player.activeCards[i] = false;
+		}
+	}
+
 	commitToBoardState() {
 		for (let i = 0; i < this.hand.length; ++i) {
 			if (this.activeCards[i]) {
@@ -92,7 +124,9 @@ export class Player {
 			if (this._deck.length == 0) {
 				this._reshuffleDiscard();
 			}
+			// TODO: make hand revealed and deck not revealed.
 			this._hand.push(this._deck[0]);
+			this.hand[this._hand.length - 1].revealed = true;
 			this._activeCards.push(false);
 			this._deck.splice(0, 1);
 		}
@@ -100,8 +134,8 @@ export class Player {
 
 	onClick(x, y) {
 		for (let i = 0; i < this._hand.length; ++i) {
-			const cardX = 290 + 40 * i;
-			const cardY = 25;
+			const cardX = cardOrigin + cardOffset * i;
+			const cardY = verticalOffset;
 
 			if (
 				this._hand[i].contains(
@@ -119,9 +153,9 @@ export class Player {
 	}
 
 	discard(index) {
-		console.log;
 		this._discardPile.push(this._hand[index]);
 		this._hand.splice(index, 1);
+		console.log(this._discardPile);
 	}
 
 	startTurn() {
@@ -135,6 +169,10 @@ export class Player {
 	}
 
 	_reshuffleDiscard() {
+		for (let i = 0; i < this._discardPile.length; ++i) {
+			this._discardPile[i].revealed = false;
+			console.log(`${this._discardPile[i].revealed}`);
+		}
 		shuffle(this._discardPile);
 		this._deck = this._discardPile;
 		this._discardPile = [];
@@ -150,10 +188,10 @@ export class Player {
 	//Player rendering
 
 	draw(ctx) {
-		const x = 200;
-		const y = 0;
-		const w = 400;
-		const h = 150;
+		const x = this._box.left;
+		const y = this._box.top;
+		let w = this._box.width;
+		let h = this._box.height;
 
 		ctx.strokeStyle = "black";
 		ctx.textBaseline = "middle";
@@ -162,20 +200,57 @@ export class Player {
 		ctx.fillStyle = this._playerColor;
 		ctx.fillRect(x, y, w, h);
 
-		if (this._discardPile > 0) {
-			this._discardPile[0].draw(ctx, x + 300, y + 25, this._cardColor);
-		}
-		if (this._deck.length > 0) {
-			this._deck[0].draw(ctx, x + 25, y + 25, this._cardColor);
-		}
-		for (let i = 0; i < this._hand.length; ++i) {
-			if (!this._activeCards[i]) {
-				this._hand[i].draw(ctx, x + 90 + 40 * i, y + 25, this._cardColor);
+		ctx.save();
+		{
+			ctx.translate(x + w / 2, y + h / 2);
+			ctx.rotate((Math.PI * this._playerNumber) / 2);
+			if (this._playerNumber % 2 == 0) {
+				w = this._box.width;
+				h = this._box.height;
 			} else {
-				this._hand[i].draw(ctx, x + 90 + 40 * i, y + 35, this._cardColor);
+				w = this._box.height;
+				h = this._box.width;
 			}
+			ctx.translate(-x - w / 2, -y - h / 2);
+			if (this._discardPile.length > 0) {
+				this._discardPile[0].draw(
+					ctx,
+					x + discardPileOffset,
+					y + verticalOffset,
+					this._cardColor
+				);
+			}
+			if (this._deck.length > 0) {
+				this._deck[0].draw(
+					ctx,
+					x + deckOffset,
+					y + verticalOffset,
+					this._cardColor
+				);
+			}
+			for (let i = 0; i < this._hand.length; ++i) {
+				if (!this._activeCards[i]) {
+					this._hand[i].draw(
+						ctx,
+						x + handOffset + cardOffset * i,
+						y + verticalOffset,
+						this._cardColor
+					);
+				} else {
+					this._hand[i].draw(
+						ctx,
+						x + handOffset + cardOffset * i,
+						y + activeOffset,
+						this._cardColor
+					);
+				}
+			}
+
+			ctx.fillStyle = "black";
+			ctx.fillText(`Gold:${this._turnGold}`, x + 420, y + 30);
+			ctx.fillText(`Power:${this._turnPower}`, x + 420, y + 60);
 		}
-		ctx.fillText(`Gold:${this._turnGold}`, x + 350, y + 30);
-		ctx.fillText(`Power:${this._turnPower}`, x + 350, y + 60);
+		// ctx.translate(x, y);
+		ctx.restore();
 	}
 }

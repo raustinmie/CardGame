@@ -2,6 +2,8 @@ export function toggle(boolean) {
 	return !boolean;
 }
 
+let TAU = Math.PI * 2;
+
 export function roll(min, max) {
 	if (max === undefined) {
 		max = min;

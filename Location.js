@@ -1,6 +1,7 @@
 import { Box, toggle } from "./util.js";
 import { Store } from "./Store.js";
 import { NeutralState, AttackState } from "./TurnStates.js";
+import { locations } from "./BoardState.js";
 
 export class Location {
 	constructor(x, y, name, store1, store2, store3, store4) {
@@ -22,6 +23,10 @@ export class Location {
 		this._underAttack = false;
 		this._defensiveCards = [];
 		this._defensivePower = 0;
+	}
+
+	get stores() {
+		return this._stores;
 	}
 
 	get underAttack() {
@@ -86,13 +91,28 @@ export class Location {
 			}
 			state.turnState = new AttackState(state);
 			console.log("Attack State");
+		} else if (
+			this._storeBox.contains(x, y) &&
+			state._currentPlayer == this._controlledBy
+		) {
+			for (let store of this._stores) {
+				store.onClick(x, y, player, state);
+			}
 		}
 	}
 	onAttackClick(x, y, state) {
 		if (this._box.contains(x, y)) {
-			this._underAttack = toggle(this._underAttack);
-			state.turnState = new NeutralState(state);
-			console.log("Neutral State");
+			if (!this._underAttack) {
+				for (let i = 0; i < locations.length; ++i) {
+					locations[i]._underAttack = false;
+				}
+				this._underAttack = true;
+			} else {
+				this._underAttack = false;
+				state.turnState = new NeutralState(state);
+				console.log("Neutral State");
+			}
+			state._currentPlayer.deactivateCards(state._currentPlayer);
 
 			// if (this._storeBox.contains(x, y)) {
 			// 	for (let store of this._stores) {

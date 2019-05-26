@@ -7,9 +7,18 @@ export class Card {
 		this._gold = gold;
 		this._power = power;
 		this._effect = effect;
+		this._revealed = false;
 	}
 	contains(x, y, cardX, cardY) {
 		return x >= cardX && x < cardX + 40 && y >= cardY && y < cardY + 100;
+	}
+
+	get revealed() {
+		return this._revealed;
+	}
+
+	set revealed(value) {
+		this._revealed = value;
 	}
 
 	get gold() {
@@ -42,9 +51,6 @@ export class Card {
 		} else if (this._effect === undefined) {
 			console.error("Missing effect");
 		}
-		// currentPlayer.turnGold = currentPlayer.turnGold + this._gold;
-		// currentPlayer.turnPower = currentPlayer.turnPower + this._power;
-		// console.log(`${this._name} played!`);
 	}
 
 	draw(ctx, x, y, color) {
@@ -58,12 +64,14 @@ export class Card {
 		ctx.strokeRect(x, y, this._width, this._height);
 		//Card Name text
 		ctx.fillStyle = "black";
-		ctx.save();
-		ctx.translate(x, y + 75);
-		ctx.rotate((Math.PI * 3) / 2);
-		ctx.fillText(`${this._name}`, 10, 10);
-		// ctx.translate(-x, -y);
-		ctx.restore();
-		ctx.fillText(`C:${this._cost}`, this._x + 10, this._y + 10);
+		if (this._revealed) {
+			ctx.save();
+			ctx.translate(x, y + 75);
+			ctx.rotate((Math.PI * 3) / 2);
+			ctx.fillText(`${this._name}`, 10, 10);
+			// ctx.translate(-x, -y);
+			ctx.restore();
+			ctx.fillText(`C:${this._cost}`, this._x + 10, this._y + 10);
+		}
 	}
 }

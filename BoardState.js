@@ -53,10 +53,10 @@ export const stores = [
 ];
 
 export const playerData = [
-	{ color: "red", x: 200, y: 0, w: 400, h: 150, cardColor: "orange" },
-	{ color: "blue", x: 650, y: 200, w: 150, h: 400, cardColor: "purple" },
-	{ color: "yellow", x: 200, y: 650, w: 400, h: 150, cardColor: "white" },
-	{ color: "green", x: 0, y: 200, w: 150, h: 400, cardColor: "brown" }
+	{ color: "red", x: 165, y: 0, w: 470, h: 150, cardColor: "orange" },
+	{ color: "blue", x: 650, y: 165, w: 150, h: 470, cardColor: "teal" },
+	{ color: "yellow", x: 165, y: 650, w: 470, h: 150, cardColor: "white" },
+	{ color: "green", x: 0, y: 165, w: 150, h: 470, cardColor: "brown" }
 ];
 
 export class BoardState {
@@ -117,11 +117,11 @@ export class BoardState {
 		ctx.font = `12px`;
 
 		for (let i = 0; i < this._players.length; ++i) {
-			ctx.translate(400, 400);
-			ctx.rotate((Math.PI / 2) * i);
-			ctx.translate(-400, -400);
+			// 	ctx.translate(400, 400);
+			// 	ctx.rotate((Math.PI / 2) * i);
+			// 	ctx.translate(-400, -400);
 			this._players[i].draw(ctx);
-			ctx.setTransform(1, 0, 0, 1, 0, 0);
+			//	ctx.setTransform(1, 0, 0, 1, 0, 0);
 		}
 
 		for (let location of locations) {
@@ -129,7 +129,7 @@ export class BoardState {
 		}
 
 		for (let store of stores) {
-			store.draw(ctx, "black");
+			store.draw(ctx);
 		}
 		this.endTurnButton.draw(ctx);
 

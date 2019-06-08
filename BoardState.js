@@ -81,6 +81,7 @@ export class BoardState {
 	}
 
 	set turnState(value) {
+		console.log(value.stateName);
 		this._turnState = value;
 	}
 
@@ -89,9 +90,6 @@ export class BoardState {
 	}
 
 	onHover(x, y) {
-		// for (let store of stores) {
-		// 	store.onClick(x, y, this._currentPlayer);
-		// }
 		for (let location of locations) {
 			location.onHover(x, y);
 		}
@@ -99,11 +97,16 @@ export class BoardState {
 
 	commit() {
 		this._turnState.commit();
-		console.log(this._turnState);
 	}
 
 	onClick(x, y) {
 		this._turnState.onClick(x, y);
+	}
+
+	activateCard(card, isActive) {
+		if (this._turnState.activateCard) {
+			this._turnState.activateCard(card, isActive);
+		}
 	}
 
 	get currentPlayer() {
@@ -111,6 +114,15 @@ export class BoardState {
 	}
 
 	draw(ctx) {
+		ctx.fillStyle = "black";
+		ctx.textAlign = "left";
+		ctx.fillText(this._turnState.instructions1, 10, 40);
+		if (this._turnState.instructions2) {
+			ctx.fillText(this._turnState.instructions2, 10, 55);
+		}
+		if (this._turnState.instructions3) {
+			ctx.fillText(this._turnState.instructions3, 10, 70);
+		}
 		ctx.strokeStyle = "black";
 		ctx.textBaseline = "middle";
 		ctx.textAlign = "center";
@@ -149,5 +161,7 @@ export class BoardState {
 	}
 
 	endTurnButton = new Button(5, 5, 50, 15, "End Turn", () => this.nextTurn());
-	commitButton = new Button(700, 5, 50, 15, "Commit", () => this.commit());
+	commitButton = new Button(700, 5, 50, 15, "Commit", () =>
+		this._turnState.commit()
+	);
 }

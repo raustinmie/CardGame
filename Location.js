@@ -2,12 +2,14 @@ import { Box, toggle } from "./util.js";
 import { Store } from "./Store.js";
 import { NeutralState, AttackState } from "./TurnStates.js";
 import { locations } from "./BoardState.js";
+import { Card } from "./Card.js";
 
 export class Location {
 	constructor(x, y, name, store1, store2, store3, store4) {
 		this._x = x;
 		this._y = y;
 		this._name = name;
+
 		this._stores = [
 			new Store(x, y - 110, store1),
 			new Store(x - 60, y - 25, store2),
@@ -37,28 +39,34 @@ export class Location {
 		if (this._underAttack) {
 			if (player.turnPower > this._defensivePower) {
 				if (this._controlledBy !== 0) {
-					this._controlledBy._discardPile.splice(
-						this._controlledBy._discardPile.length,
-						0,
+					this._controlledBy._discardPile = this._controlledBy._discardPile.concat(
 						this._defensiveCards
 					);
 				}
-				console.log(`${this._controlledBy._discardPile} returned`);
 				if (this._defensiveCards !== undefined) {
 					this._defensiveCards.splice(0, this._defensiveCards.length);
 				}
-				for (let i = player.hand.length; i > 0; --i) {
-					if (player.activeCards[i - 1]) {
-						console.log(player.hand[i - 1]);
-						this._defensiveCards.push(player.hand[i - 1]);
-						console.log(this._defensiveCards);
-						player.hand.splice(i - 1, 1);
-						player.activeCards.splice(i - 1, 1);
+				for (let i = player.hand.length - 1; i > -1; --i) {
+					if (player.activeCards[i]) {
+						console.log(player.hand[i].name);
+						console.log(player.hand[i].afterAttack);
+						if (player._hand[i].afterAttack === "defend") {
+							this._defensiveCards.push(player.hand[i]);
+							player.hand.splice(i, 1);
+							player.activeCards.splice(i, 1);
+						} else if (player.hand[i].afterAttack === "discard") {
+							player.discard(i);
+							console.log("discard attacking card");
+						}
 					}
 				}
 				this._controlledBy = player;
-				this._defensivePower = this._controlledBy.turnPower;
-				console.log(this._controlledBy._discardPile);
+				this._defensivePower = 0;
+				console.log(this._defensiveCards);
+				for (let i = 0; i < this._defensiveCards.length; ++i) {
+					this._defensivePower += this._defensiveCards[i].power;
+				}
+				console.log(this._defensiveCards);
 			}
 		} else {
 			console.log("not enough power");
@@ -83,20 +91,19 @@ export class Location {
 		}
 	}
 
-	onClick(x, y, state, player) {
+	onClick(x, y, state) {
 		if (this._box.contains(x, y)) {
 			this._underAttack = toggle(this._underAttack);
-			for (let i = 0; i < player.hand.length; ++i) {
-				player.activeCards[i] = false;
+			for (let i = 0; i < state.currentPlayer.hand.length; ++i) {
+				state.currentPlayer.activeCards[i] = false;
 			}
 			state.turnState = new AttackState(state);
-			console.log("Attack State");
 		} else if (
 			this._storeBox.contains(x, y) &&
 			state._currentPlayer == this._controlledBy
 		) {
 			for (let store of this._stores) {
-				store.onClick(x, y, player, state);
+				store.onClick(x, y, state);
 			}
 		}
 	}
@@ -110,7 +117,6 @@ export class Location {
 			} else {
 				this._underAttack = false;
 				state.turnState = new NeutralState(state);
-				console.log("Neutral State");
 			}
 			state._currentPlayer.deactivateCards(state._currentPlayer);
 

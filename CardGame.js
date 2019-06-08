@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function onLoad(event) {
 	}
 	//	state.draw(ctx);
 	boardCanvas.addEventListener("click", event => {
-		//console.log(`board clicked ${event.clientX}, ${event.clientY}`);
 		let rect = boardCanvas.getBoundingClientRect();
 		const xPos = event.clientX - rect.left;
 		const yPos = event.clientY - rect.top;
@@ -27,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function onLoad(event) {
 	boardCanvas.addEventListener("keydown", event => {
 		if (event == 27) {
 			state.turnState = "neutral";
-			console.log(state.turnState);
 		}
 	});
 	// // start the game
@@ -54,8 +52,3 @@ document.addEventListener("DOMContentLoaded", function onLoad(event) {
 	};
 	window.requestAnimationFrame(gameLoop);
 });
-
-// console() {
-// 	console.log(this._deck);
-// 	console.log(this._hand);
-// }

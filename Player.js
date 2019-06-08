@@ -4,7 +4,7 @@ import { library } from "./CardLibrary.js";
 
 const cardOffset = 40;
 const handOffset = 90;
-const discardPileOffset = 300;
+const discardPileOffset = 310;
 const deckOffset = 25;
 const activeOffset = 35;
 const verticalOffset = 25;
@@ -26,27 +26,20 @@ export class Player {
 		this._activeCards = [];
 
 		//INITIALIZE: DEAL PLAYER CARDS
+		// for (let j = 0; j < 1; ++j) {
+		// 	this.addToDeck(new Card(library.foodCache));
+		// }
+		// for (let j = 0; j < 1; ++j) {
+		// 	this.addToDeck(new Card(library.friar));
+		// }
 		for (let j = 0; j < 1; ++j) {
-			this.addToDeck(
-				new Card(
-					library.angryMob.cost,
-					library.angryMob.name,
-					library.angryMob.gold,
-					library.angryMob.power,
-					library.angryMob.effect
-				)
-			);
+			this.addToDeck(new Card(library.friar));
 		}
-		for (let j = 0; j < 4; ++j) {
-			this.addToDeck(
-				new Card(
-					library.oldFarmer.cost,
-					library.oldFarmer.name,
-					library.oldFarmer.gold,
-					library.oldFarmer.power,
-					library.oldFarmer.effect
-				)
-			);
+		for (let j = 0; j < 2; ++j) {
+			this.addToDeck(new Card(library.fasting));
+		}
+		for (let j = 0; j < 2; ++j) {
+			this.addToDeck(new Card(library.angryMob));
 		}
 	}
 
@@ -95,34 +88,18 @@ export class Player {
 		}
 	}
 
-	calculatePower() {
-		this._turnPower = 0;
-		for (let i = 0; i < this._hand.length; ++i) {
-			if (this._activeCards[i]) {
-				this._turnPower += this._hand[i].power;
-			}
-		}
-	}
-
 	deactivateCards(player) {
 		for (let i = 0; i < player.hand.length; ++i) {
 			player.activeCards[i] = false;
 		}
 	}
 
-	commitToBoardState() {
-		for (let i = 0; i < this.hand.length; ++i) {
-			if (this.activeCards[i]) {
-				console.log(`${this.hand[i].name}`);
-				this.hand[i].playCard(this);
-			}
-		}
-	}
-
 	pickUpCard(value) {
 		for (let i = 0; i < value; ++i) {
-			if (this._deck.length == 0) {
+			if (this._deck.length == 0 && this._discardPile.length !== 0) {
 				this._reshuffleDiscard();
+			} else if (this._deck.length == 0 && this._discardPile.length == 0) {
+				break;
 			}
 			// TODO: make hand revealed and deck not revealed.
 			this._hand.push(this._deck[0]);
@@ -132,7 +109,7 @@ export class Player {
 		}
 	}
 
-	onClick(x, y) {
+	onClick(boardState, x, y) {
 		for (let i = 0; i < this._hand.length; ++i) {
 			const cardX = cardOrigin + cardOffset * i;
 			const cardY = verticalOffset;
@@ -148,6 +125,8 @@ export class Player {
 				)
 			) {
 				this._activeCards[i] = toggle(this._activeCards[i]);
+				boardState.activateCard(this._hand[i], this._activeCards[i]);
+				// this._hand[i].activate(boardState);
 			}
 		}
 	}
@@ -155,7 +134,7 @@ export class Player {
 	discard(index) {
 		this._discardPile.push(this._hand[index]);
 		this._hand.splice(index, 1);
-		console.log(this._discardPile);
+		this._activeCards.splice(index, 1);
 	}
 
 	startTurn() {
@@ -171,7 +150,6 @@ export class Player {
 	_reshuffleDiscard() {
 		for (let i = 0; i < this._discardPile.length; ++i) {
 			this._discardPile[i].revealed = false;
-			console.log(`${this._discardPile[i].revealed}`);
 		}
 		shuffle(this._discardPile);
 		this._deck = this._discardPile;
@@ -213,7 +191,7 @@ export class Player {
 			}
 			ctx.translate(-x - w / 2, -y - h / 2);
 			if (this._discardPile.length > 0) {
-				this._discardPile[0].draw(
+				this._discardPile[this._discardPile.length - 1].draw(
 					ctx,
 					x + discardPileOffset,
 					y + verticalOffset,

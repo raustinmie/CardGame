@@ -1,3 +1,5 @@
+// TODO: WEB SOCKETS
+
 export function toggle(boolean) {
 	return !boolean;
 }
@@ -79,7 +81,6 @@ export class Button {
 
 	onClick(x, y) {
 		if (this._box.contains(x, y)) {
-			console.log(`${this._name} Button Clicked!`);
 			this._effect(x, y);
 		}
 	}

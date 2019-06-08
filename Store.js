@@ -10,8 +10,8 @@ export class Store {
 	constructor(x, y, card) {
 		this._x = x;
 		this._y = y;
-		this._cost = card.cost;
 		this._name = card.name;
+		this._cost = card.cost;
 		this._card = card;
 		this._box = new Box(x, y, cardWidth, cardHeight);
 		this._buying = false;
@@ -29,27 +29,16 @@ export class Store {
 		return this._y;
 	}
 
-	onClick(x, y, player, state) {
+	onClick(x, y, state) {
 		if (this._box.contains(x, y)) {
-			player.deactivateCards;
+			state._currentPlayer.deactivateCards;
 			this._buying = toggle(this._buying);
 			state.turnState = new BuyState(state);
-			console.log("Buy State");
 		}
 	}
 	buy(state) {
 		if (state._currentPlayer.turnGold >= this._cost) {
-			state._currentPlayer.addToDiscard(
-				new Card(
-					this._card.cost,
-					this._card.name,
-					this._card.gold,
-					this._card.power,
-					this._card.effect
-				)
-			);
-			console.log(state._currentPlayer._discardPile);
-			console.log(`${this._name} bought`);
+			state._currentPlayer.addToDiscard(new Card(this._card));
 			for (let i = state._currentPlayer.hand.length; i > 0; --i) {
 				if (state._currentPlayer.activeCards[i - 1]) {
 					state._currentPlayer._discardPile.push(
@@ -59,7 +48,6 @@ export class Store {
 					state._currentPlayer.activeCards.splice(i - 1, 1);
 				}
 				state._currentPlayer.turnGold = 0;
-				console.log(state._currentPlayer._discardPile);
 			}
 		} else {
 			alert("Not enough gold!");
@@ -83,7 +71,6 @@ export class Store {
 			} else {
 				this._buying = false;
 				state.turnState = new NeutralState(state);
-				console.log("Neutral State");
 			}
 			state._currentPlayer.deactivateCards(state._currentPlayer);
 		}

@@ -1,13 +1,15 @@
 export class Card {
-	constructor(cost, name, gold, power, effect) {
-		this._cost = cost;
-		this._name = name;
+	constructor(card) {
+		this._cost = card.cost;
+		this._name = card.name;
 		this._width = 50;
 		this._height = 100;
-		this._gold = gold;
-		this._power = power;
-		this._effect = effect;
-		this._revealed = false;
+		this._gold = card.gold;
+		this._power = card.power;
+		this._onActivate = card.effect;
+		this._revealed = true;
+		this._afterAttack = card.afterAttack;
+		this._attackEffect = card.attackEffect;
 	}
 	contains(x, y, cardX, cardY) {
 		return x >= cardX && x < cardX + 40 && y >= cardY && y < cardY + 100;
@@ -15,6 +17,10 @@ export class Card {
 
 	get revealed() {
 		return this._revealed;
+	}
+
+	get afterAttack() {
+		return this._afterAttack;
 	}
 
 	set revealed(value) {
@@ -45,10 +51,18 @@ export class Card {
 		return this._height;
 	}
 
-	playCard(currentPlayer) {
-		if (this._effect) {
-			this._effect(currentPlayer);
-		} else if (this._effect === undefined) {
+	activateAttack(boardState, isActive) {
+		if (this._attackEffect) {
+			this._attackEffect(boardState, isActive);
+		} else if (this._attackEffect === undefined) {
+			console.error("Missing Effect");
+		}
+	}
+
+	activate(boardState, isActive) {
+		if (this._onActivate) {
+			this._onActivate(boardState, isActive);
+		} else if (this._onActivate === undefined) {
 			console.error("Missing effect");
 		}
 	}

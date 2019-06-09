@@ -80,6 +80,10 @@ export class BoardState {
 		return this._turnState;
 	}
 
+	get players() {
+		return this._players;
+	}
+
 	set turnState(value) {
 		console.log(value.stateName);
 		this._turnState = value;

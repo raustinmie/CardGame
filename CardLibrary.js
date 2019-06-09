@@ -1,6 +1,10 @@
 import { Card } from "./Card.js";
 import { BoardState } from "./BoardState.js";
-import { NeutralState, AttackState, FoodCacheState } from "./TurnStates.js";
+import {
+	NeutralState,
+	StarveEmOutState,
+	FoodCacheState
+} from "./TurnStates.js";
 
 function newState(boardState, isActive, ChangeTo, ElseState) {
 	if (!isActive) {
@@ -44,7 +48,7 @@ export const library = {
 		name: "Starvation",
 		gold: -1,
 		power: -1,
-		effect: undefined,
+		effect: null,
 		afterAttack: "discard",
 		attackEffect: null
 	},
@@ -64,12 +68,7 @@ export const library = {
 		gold: 0,
 		power: 0,
 		effect: (boardState, isActive) => {
-			newState(
-				boardState,
-				isActive,
-				FoodCacheState,
-				NeutralState
-			); /*trash a starvation card*/
+			newState(boardState, isActive, FoodCacheState, NeutralState);
 		},
 		afterAttack: null,
 		attackEffect: null
@@ -99,14 +98,18 @@ export const library = {
 		name: "Starve 'em Out!",
 		gold: 0,
 		power: 0,
-		effect: () => {
-			for (let i = 0; i < players.length; ++i) {
-				if (i !== state.currentPlayer.playerNumber) {
-					players[i].addToDiscard(library.angryMob);
-				}
-			}
-			/*Each other player gains a starvation card*/
+		effect: (boardState, isActive) => {
+			newState(boardState, isActive, StarveEmOutState, NeutralState);
 		},
+
+		// () => {
+		// 	for (let i = 0; i < players.length; ++i) {
+		// 		if (i !== state.currentPlayer.playerNumber) {
+		// 			players[i].addToDiscard(library.angryMob);
+		// 		}
+		// 	}
+		/*Each other player gains a starvation card*/
+
 		afterAttack: "discard",
 		attackEffect: null
 	},

@@ -1,4 +1,4 @@
-import { stores, locations, BoardState } from "./BoardState.js";
+import { stores, locations, BoardState, playerData } from "./BoardState.js";
 import { Card } from "./Card.js";
 import { library } from "./CardLibrary.js";
 
@@ -17,6 +17,14 @@ class State {
 
 	get hand() {
 		return this.currentPlayer.hand;
+	}
+
+	cardIsActive(cardName) {
+		for (let i = this.hand.length - 1; i > -1; --i) {
+			if (this.hand[i] == cardName && this._currentPlayer._activeCards[i]) {
+				return true;
+			}
+		}
 	}
 
 	attackLocation() {
@@ -231,63 +239,33 @@ export class FoodCacheState extends State {
 		this.deactivateState(null, NeutralState);
 	}
 }
-// export class FriarState extends AttackState {
-// 	instructions1 = "Click Commit to gain";
-// 	instructions2 = "An Angry Mob";
-// 	instructions3 = null;
-// 	onClick(x, y) {
-// 		this._boardState.commitButton.onClick(x, y);
-// 		this.onPlayerClick(x, y);
-// 		this.deactivateState("Friar", AttackState);
-// 	}
-// 	commit() {
-// 		for (let i = 0; i < this.hand.length; ++i) {
-// 			if (this.hand[i].name == "Friar" && this.currentPlayer.activeCards[i]) {
-// 				this.attackLocation();
-// 				this.currentPlayer.addToDiscard(new Card(library.angryMob));
-// 			}
-// 		}
-// 		this.deactivateState(null, NeutralState);
-// 	}
-// }
-// export class FastingState extends AttackState {
-// 	instructions1 = "Click Commit to double";
-// 	instructions2 = "the strength of angry mobs";
-// 	instructions3 = null;
-// while (this._boardstate ==) {
 
-// }
-// 	onClick(x, y) {
-// 		this._boardState.commitButton.onClick(x, y);
-// 		this.onPlayerClick(x, y);
-// 		this.deactivateState("Fasting", AttackState);
-// 		let fastingCards = 0;
-// 		let angryMobCards = 0;
-// 		for (let i = 0; i < this.hand.length; ++i) {
-// 			if (
-// 				this.hand[i].name === "Fasting" &&
-// 				this.currentPlayer.activeCards[i]
-// 			) {
-// 				++fastingCards;
-// 			} else if (
-// 				this.hand[i].name === "Angry Mob" &&
-// 				this.currentPlayer.activeCards[i]
-// 			) {
-// 				++angryMobCards;
-// 			}
-// 		}
-// 		let fastingPower =
-// 			angryMobCards * Math.pow(2, fastingCards) - angryMobCards;
-// 		this.currentPlayer.turnPower += fastingPower;
-// 		this.currentPlayer.calculatePower(null);
-// 	}
-// 	commit() {
-// 		for (let i = 0; i < this.hand.length; ++i) {
-// 			if (this.hand[i].name == "Fasting" && this.currentPlayer.activeCards[i]) {
-// 				this.currentPlayer.discard(i);
-// 			}
-// 		}
-// 		this.attackLocation();
-// 		this._boardState.turnState = new AttackState(this._boardState);
-// 	}
-//}
+export class StarveEmOutState extends State {
+	instructions1 = "Click Commit to give";
+	instructions2 = "Every other player";
+	instructions3 = "a Starvation card.";
+	onClick(x, y) {
+		this._boardState.commitButton.onClick(x, y);
+		this.onPlayerClick(x, y);
+		this.deactivateState("Starve 'em Out!", NeutralState);
+	}
+	commit() {
+		for (let i = 0; i < this.hand.length; ++i) {
+			if (
+				this.hand[i].name === "Starve 'em Out!" &&
+				this.currentPlayer.activeCards[i]
+			) {
+				console.log("giving players starvation cards");
+				for (let j = 0; j < playerData.length; ++j) {
+					if (this._boardState.players[j] !== this._currentPlayer) {
+						this._boardState.players[j].addToDiscard(
+							new Card(library.starvation)
+						);
+					}
+				}
+				this.currentPlayer.discard(i);
+			}
+		}
+		this.deactivateState(null, NeutralState);
+	}
+}

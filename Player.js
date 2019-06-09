@@ -33,7 +33,7 @@ export class Player {
 		// 	this.addToDeck(new Card(library.friar));
 		// }
 		for (let j = 0; j < 1; ++j) {
-			this.addToDeck(new Card(library.friar));
+			this.addToDeck(new Card(library.starveEmOut));
 		}
 		for (let j = 0; j < 2; ++j) {
 			this.addToDeck(new Card(library.fasting));
@@ -45,6 +45,10 @@ export class Player {
 
 	get hand() {
 		return this._hand;
+	}
+
+	get playerNumber() {
+		return this.playerNumber;
 	}
 
 	get playerColor() {

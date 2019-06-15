@@ -89,11 +89,12 @@ export class Location {
 				for (let i = 0; i < this._defensiveCards.length; ++i) {
 					this._defensivePower += this._defensiveCards[i].power;
 				}
+			} else {
+				console.log("not enough power");
+				player.deactivateCards();
 			}
-		} else {
-			console.log("not enough power");
+			this._underAttack = false;
 		}
-		this._underAttack = false;
 	}
 
 	set underAttack(value) {

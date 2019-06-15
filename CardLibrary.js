@@ -144,7 +144,7 @@ export const library = {
 		name: "Siege Engine",
 		gold: 0,
 		power: 5,
-		effect: undefined,
+		effect: null,
 		afterAttack: "trash",
 		attackEffect: null //single use only - COMPLETE
 	},
@@ -164,7 +164,7 @@ export const library = {
 		name: "Priest",
 		gold: 2,
 		power: 0,
-		effect: undefined,
+		effect: null,
 		afterAttack: "discard",
 		attackEffect: null /*a defending angry mob becomes yours and is attacking*/
 	},

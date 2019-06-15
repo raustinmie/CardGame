@@ -30,13 +30,13 @@ export class Player {
 		// 	this.addToDeck(new Card(library.foodCache));
 		// }
 		for (let j = 0; j < 1; ++j) {
-			this.addToDeck(new Card(library.friar));
+			this.addToDeck(new Card(library.priest));
 		}
 		// for (let j = 0; j < 1; ++j) {
 		// 	this.addToDeck(new Card(library.millersDaughter));
 		// }
 		for (let j = 0; j < 2; ++j) {
-			this.addToDeck(new Card(library.fasting));
+			this.addToDeck(new Card(library.youngFarmhand));
 		}
 		for (let j = 0; j < 2; ++j) {
 			this.addToDeck(new Card(library.angryMob));
@@ -97,9 +97,9 @@ export class Player {
 		this.activeCards.splice(index, 1);
 	}
 
-	deactivateCards(player) {
-		for (let i = 0; i < player.hand.length; ++i) {
-			player.activeCards[i] = false;
+	deactivateCards() {
+		for (let i = 0; i < this.hand.length; ++i) {
+			this.activeCards[i] = false;
 		}
 	}
 

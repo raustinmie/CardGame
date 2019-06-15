@@ -25,9 +25,28 @@ class State {
 			return true;
 		}
 	}
+	priestEffect(location) {
+		for (let i = 0; i < location._defensiveCards.length; ++i) {
+			if (location._defensiveCards[i].name === "Angry Mob") {
+				location._defensiveCards.splice(i, 1);
+				location._activeCards.splice(i, 1);
+				this.hand.push(new Card(library.angryMob));
+				this.currentPlayer.activeCards.push(true);
+				this.calculatePower();
+				break;
+			}
+		}
+	}
 
 	attackLocation() {
 		let location = locations.find(l => l.underAttack);
+		for (let i = 0; i < this.hand.length; ++i) {
+			if (this.cardIsActive(i, "Priest")) {
+				this.priestEffect(location);
+			} else if (this.cardIsActive(i, "Friar")) {
+				this.currentPlayer.addToDiscard(new Card(library.angryMob));
+			}
+		}
 		location.attack(this.currentPlayer);
 	}
 
@@ -49,7 +68,7 @@ class State {
 		}
 		if (stateCard === 0) {
 			this._boardState.turnState = new EndState(this._boardState);
-			this.currentPlayer.deactivateCards(this.currentPlayer);
+			this.currentPlayer.deactivateCards();
 		}
 		this.currentPlayer.turnPower = 0;
 		this.currentPlayer.turnGold = 0;
@@ -123,14 +142,6 @@ export class AttackState extends State {
 	instructions3 = null;
 
 	commit() {
-		for (let i = this.hand.length - 1; i > -1; --i) {
-			if (
-				this.cardIsActive(i, "Friar")
-				// this.hand[i].name === "Friar" && this.currentPlayer.activeCards[i]
-			) {
-				this.currentPlayer.addToDiscard(new Card(library.angryMob));
-			}
-		}
 		this.attackLocation();
 		this._boardState.turnState = new NeutralState(this._boardState);
 		this.currentPlayer.turnPower = 0;

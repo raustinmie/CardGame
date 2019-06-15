@@ -33,7 +33,7 @@ export class Store {
 
 	onClick(x, y, state) {
 		if (this._box.contains(x, y)) {
-			state._currentPlayer.deactivateCards;
+			state._currentPlayer.deactivateCards();
 			this._buying = toggle(this._buying);
 			state.turnState = new BuyState(state);
 		}
@@ -53,7 +53,7 @@ export class Store {
 			}
 		} else {
 			alert("Not enough gold!");
-			state._currentPlayer.deactivateCards(player);
+			state._currentPlayer.deactivateCards();
 			this._buying = toggle(this._buying);
 		}
 		this._buying = false;
@@ -74,7 +74,7 @@ export class Store {
 				this._buying = false;
 				state.turnState = new NeutralState(state);
 			}
-			state._currentPlayer.deactivateCards(state._currentPlayer);
+			state._currentPlayer.deactivateCards();
 		}
 	}
 	draw(ctx) {

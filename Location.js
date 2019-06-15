@@ -3,6 +3,7 @@ import { Store } from "./Store.js";
 import { NeutralState, AttackState } from "./TurnStates.js";
 import { locations } from "./BoardState.js";
 import { Card } from "./Card.js";
+import { library } from "./CardLibrary.js";
 
 export class Location {
 	constructor(x, y, name, store1, store2, store3, store4) {
@@ -25,6 +26,7 @@ export class Location {
 		this._underAttack = false;
 		this._defensiveCards = [];
 		this._defensivePower = 0;
+		this._activeCards = [];
 	}
 
 	get stores() {
@@ -34,6 +36,26 @@ export class Location {
 	get underAttack() {
 		return this._underAttack;
 	}
+
+	get activeCards() {
+		return this._activeCards;
+	}
+
+	get defensiveCards() {
+		return this._defensiveCards;
+	}
+
+	set defensiveCards(value) {
+		this._defensiveCards = value;
+	}
+
+	set activeCards(value) {
+		this._activeCards = value;
+	}
+
+	cardOffset = 10;
+	cardTopOffest = 25;
+	activeOffset = 10;
 
 	attack(player) {
 		if (this._underAttack) {
@@ -48,25 +70,25 @@ export class Location {
 				}
 				for (let i = player.hand.length - 1; i > -1; --i) {
 					if (player.activeCards[i]) {
-						console.log(player.hand[i].name);
-						console.log(player.hand[i].afterAttack);
 						if (player._hand[i].afterAttack === "defend") {
 							this._defensiveCards.push(player.hand[i]);
-							player.hand.splice(i, 1);
-							player.activeCards.splice(i, 1);
+							this._activeCards.push(false);
+							player.removeCard(i);
 						} else if (player.hand[i].afterAttack === "discard") {
 							player.discard(i);
-							console.log("discard attacking card");
+						} else if (player.hand[i].afterAttack === "trash") {
+							player.removeCard(i);
 						}
 					}
 				}
 				this._controlledBy = player;
+				if (this._defensiveCards == []) {
+					this._controlledBy = false;
+				}
 				this._defensivePower = 0;
-				console.log(this._defensiveCards);
 				for (let i = 0; i < this._defensiveCards.length; ++i) {
 					this._defensivePower += this._defensiveCards[i].power;
 				}
-				console.log(this._defensiveCards);
 			}
 		} else {
 			console.log("not enough power");
@@ -91,6 +113,12 @@ export class Location {
 		}
 	}
 
+	deactivateCards(location) {
+		for (let i = 0; i < location.defensiveCards.length; ++i) {
+			location.defensiveCards[i] = false;
+		}
+	}
+
 	onClick(x, y, state) {
 		if (this._box.contains(x, y)) {
 			this._underAttack = toggle(this._underAttack);
@@ -99,11 +127,41 @@ export class Location {
 			}
 			state.turnState = new AttackState(state);
 		} else if (
+			this._storesVisible &&
 			this._storeBox.contains(x, y) &&
 			state._currentPlayer == this._controlledBy
 		) {
 			for (let store of this._stores) {
 				store.onClick(x, y, state);
+			}
+		}
+
+		for (let j = 0; j < this._defensiveCards.length; ++j) {
+			const cardX =
+				this._box.left - this.cardOffset * (this._defensiveCards.length - j);
+			const cardY = this._box.top - this.cardTopOffest;
+
+			if (
+				this._defensiveCards[j].contains(x, y, cardX, cardY) &&
+				!this._box.contains(x, y) &&
+				(j === this._defensiveCards.length - 1 ||
+					!this._defensiveCards[j + 1].contains(
+						x,
+						y,
+						cardX + this.cardOffset,
+						cardY
+					))
+			) {
+				for (let k = 0; k < locations.length; ++k) {
+					for (let i = 0; i < this._defensiveCards.length; ++i) {
+						if (this != locations[k] || i != j) {
+							locations[k]._activeCards[i] = false;
+							console.log(locations[k]);
+						}
+					}
+				}
+				this._activeCards[j] = toggle(this._activeCards[j]);
+				console.log(this._activeCards[j]);
 			}
 		}
 	}
@@ -119,23 +177,29 @@ export class Location {
 				state.turnState = new NeutralState(state);
 			}
 			state._currentPlayer.deactivateCards(state._currentPlayer);
-
-			// if (this._storeBox.contains(x, y)) {
-			// 	for (let store of this._stores) {
-			// 		store.onClick(x, y, player);
-			// 	}
-			//}
 		}
 	}
 	draw(ctx) {
-		if (this._defensiveCards !== 0) {
+		if (this._defensiveCards.length !== 0) {
 			for (let i = 0; i < this._defensiveCards.length; ++i) {
-				this._defensiveCards[i].draw(
-					ctx,
-					this._box.left - (this._defensiveCards.length - i) * 10,
-					this._box.top - 25,
-					this._controlledBy.color
-				);
+				if (!this._activeCards[i]) {
+					this._defensiveCards[i].draw(
+						ctx,
+						this._box.left -
+							(this._defensiveCards.length - i) * this.cardOffset,
+						this._box.top - this.cardTopOffest,
+						"white"
+					);
+				} else {
+					console.log(this._defensiveCards[i]);
+					this._defensiveCards[i].draw(
+						ctx,
+						this._box.left -
+							(this._defensiveCards.length - i) * this.cardOffset,
+						this._box.top - this.cardTopOffest - this.activeOffset,
+						"green"
+					);
+				}
 			}
 		}
 		if (this._controlledBy) {

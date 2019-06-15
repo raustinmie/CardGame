@@ -93,12 +93,6 @@ export class BoardState {
 		return this._running;
 	}
 
-	onHover(x, y) {
-		for (let location of locations) {
-			location.onHover(x, y);
-		}
-	}
-
 	commit() {
 		this._turnState.commit();
 	}

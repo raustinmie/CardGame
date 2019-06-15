@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function onLoad(event) {
 		let rect = boardCanvas.getBoundingClientRect();
 		const xPos = event.clientX - rect.left;
 		const yPos = event.clientY - rect.top;
-		state.onHover(xPos, yPos);
+		state.turnState.onHover(xPos, yPos);
 	});
 	boardCanvas.addEventListener("keydown", event => {
 		if (event == 27) {

@@ -29,6 +29,8 @@ export class Store {
 		return this._y;
 	}
 
+	//TODO make stores unclickable when invisible.
+
 	onClick(x, y, state) {
 		if (this._box.contains(x, y)) {
 			state._currentPlayer.deactivateCards;

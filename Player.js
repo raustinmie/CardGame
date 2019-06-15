@@ -29,12 +29,12 @@ export class Player {
 		// for (let j = 0; j < 1; ++j) {
 		// 	this.addToDeck(new Card(library.foodCache));
 		// }
-		// for (let j = 0; j < 1; ++j) {
-		// 	this.addToDeck(new Card(library.friar));
-		// }
 		for (let j = 0; j < 1; ++j) {
-			this.addToDeck(new Card(library.starveEmOut));
+			this.addToDeck(new Card(library.friar));
 		}
+		// for (let j = 0; j < 1; ++j) {
+		// 	this.addToDeck(new Card(library.millersDaughter));
+		// }
 		for (let j = 0; j < 2; ++j) {
 			this.addToDeck(new Card(library.fasting));
 		}
@@ -92,6 +92,11 @@ export class Player {
 		}
 	}
 
+	removeCard(index) {
+		this.hand.splice(index, 1);
+		this.activeCards.splice(index, 1);
+	}
+
 	deactivateCards(player) {
 		for (let i = 0; i < player.hand.length; ++i) {
 			player.activeCards[i] = false;
@@ -105,7 +110,6 @@ export class Player {
 			} else if (this._deck.length == 0 && this._discardPile.length == 0) {
 				break;
 			}
-			// TODO: make hand revealed and deck not revealed.
 			this._hand.push(this._deck[0]);
 			this.hand[this._hand.length - 1].revealed = true;
 			this._activeCards.push(false);

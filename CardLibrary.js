@@ -3,7 +3,9 @@ import { BoardState } from "./BoardState.js";
 import {
 	NeutralState,
 	StarveEmOutState,
-	FoodCacheState
+	FoodCacheState,
+	MillersDaughterState,
+	MasterSmithState
 } from "./TurnStates.js";
 
 function newState(boardState, isActive, ChangeTo, ElseState) {
@@ -69,7 +71,7 @@ export const library = {
 		power: 0,
 		effect: (boardState, isActive) => {
 			newState(boardState, isActive, FoodCacheState, NeutralState);
-		},
+		}, // Trash a starvation card - COMPLETE
 		afterAttack: null,
 		attackEffect: null
 	},
@@ -86,10 +88,10 @@ export const library = {
 		cost: 5,
 		name: "Miller's Daughter",
 		gold: 2,
-		power: 0, //remove an enemy card from a location
+		power: 0,
 		effect: (boardState, isActive) => {
 			newState(boardState, isActive, MillersDaughterState, NeutralState);
-		},
+		}, //remove an enemy card from a location - COMPLETE
 		afterAttack: "discard",
 		attackEffect: null
 	},
@@ -101,14 +103,7 @@ export const library = {
 		effect: (boardState, isActive) => {
 			newState(boardState, isActive, StarveEmOutState, NeutralState);
 		},
-
-		// () => {
-		// 	for (let i = 0; i < players.length; ++i) {
-		// 		if (i !== state.currentPlayer.playerNumber) {
-		// 			players[i].addToDiscard(library.angryMob);
-		// 		}
-		// 	}
-		/*Each other player gains a starvation card*/
+		/*Each other player gains a starvation card - COMPLETE*/
 
 		afterAttack: "discard",
 		attackEffect: null
@@ -138,7 +133,9 @@ export const library = {
 		name: "Master Smith",
 		gold: 3,
 		power: 1,
-		effect: undefined,
+		effect: (boardState, isActive) => {
+			newState(boardState, isActive, MasterSmithState, NeutralState);
+		},
 		afterAttack: "defend",
 		attackEffect: null //you may draw a card from the discard pile
 	},
@@ -148,8 +145,8 @@ export const library = {
 		gold: 0,
 		power: 5,
 		effect: undefined,
-		afterAttack: null,
-		attackEffect: null /*single use only*/
+		afterAttack: "trash",
+		attackEffect: null //single use only - COMPLETE
 	},
 
 	//ABBEY CARDS
@@ -160,9 +157,7 @@ export const library = {
 		power: 1,
 		effect: null,
 		afterAttack: "defend",
-		attackEffect: null //(boardState, isActive) => {
-		// 	newState(boardState, isActive, FriarState, AttackState);
-		//}addToDiscard() /*add an angry mob to your discard pile*/
+		attackEffect: null //gain an angry mob in your discard pile - COMPLETE
 	},
 	priest: {
 		cost: 4,
@@ -180,10 +175,8 @@ export const library = {
 		power: 0,
 		effect: null,
 		afterAttack: "discard",
-		attackEffect: null // (boardState, isActive) => {
-		// 	newState(boardState, isActive, FastingState, AttackState);
-		// }
-		/*double the strength of all angry mobs (cumulative)*/
+		attackEffect: null
+		/*double the strength of all angry mobs (cumulative) - COMPLETE*/
 	},
 	fireAndBrimstone: {
 		cost: 5,

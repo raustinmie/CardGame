@@ -5,7 +5,8 @@ import {
 	StarveEmOutState,
 	FoodCacheState,
 	MillersDaughterState,
-	MasterSmithState
+	MasterSmithState,
+	CallToArmsState
 } from "./TurnStates.js";
 
 function newState(boardState, isActive, ChangeTo, ElseState) {
@@ -166,7 +167,7 @@ export const library = {
 		power: 0,
 		effect: null,
 		afterAttack: "discard",
-		attackEffect: null /*a defending angry mob becomes yours and is attacking*/
+		attackEffect: null //a defending angry mob becomes yours and is attacking - COMPLETE
 	},
 	fasting: {
 		cost: 4,
@@ -191,13 +192,15 @@ export const library = {
 
 	//CASTLE CARDS
 	callToArms: {
-		cost: 3,
+		cost: 4,
 		name: "Call To Arms",
 		gold: 0,
 		power: 0,
-		effect: undefined,
+		effect: (boardState, isActive) => {
+			newState(boardState, isActive, CallToArmsState, NeutralState);
+		}, //Draw 3 cards
 		afterAttack: "discard",
-		attackEffect: null /*pickUpCard(2)*/
+		attackEffect: null
 	},
 	squire: {
 		cost: 4,

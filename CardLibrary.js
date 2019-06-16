@@ -6,7 +6,8 @@ import {
 	FoodCacheState,
 	MillersDaughterState,
 	MasterSmithState,
-	CallToArmsState
+	CallToArmsState,
+	DeedOfValorState
 } from "./TurnStates.js";
 
 function newState(boardState, isActive, ChangeTo, ElseState) {
@@ -225,7 +226,9 @@ export const library = {
 		name: "Deed of Valor",
 		gold: 0,
 		power: 0,
-		effect: undefined /*one angry mob becomes a squire, or one squire becomes a knight*/,
+		effect: (boardState, isActive) => {
+			newState(boardState, isActive, DeedOfValorState, NeutralState);
+		} /*one angry mob becomes a squire, or one squire becomes a knight*/,
 		afterAttack: "defend",
 		attackEffect: null
 	}

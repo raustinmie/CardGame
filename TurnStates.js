@@ -62,7 +62,7 @@ class State {
 	deactivateState(cardName, EndState) {
 		let stateCard = 0;
 		for (let i = 0; i < this.hand.length; ++i) {
-			if (this.cardIsActive(cardName)) {
+			if (this.cardIsActive(i, cardName)) {
 				++stateCard;
 			}
 		}
@@ -320,20 +320,16 @@ export class MillersDaughterState extends State {
 							console.log("discarding card");
 							locations[j]._defensiveCards.splice(k, 1);
 							locations[j].activeCards.splice(k, 1);
+							this.currentPlayer.discard(i);
 						}
 					}
 				}
-				this.currentPlayer.discard(i);
 			}
 		}
 		this.deactivateState(null, NeutralState);
 	}
 }
 export class MasterSmithState extends State {
-	constructor() {
-		this._activeCards = [[]];
-		this.initiateActiveCards();
-	}
 	onClick(x, y) {
 		this._boardState.commitButton.onClick(x, y);
 	}
@@ -393,5 +389,45 @@ export class CallToArmsState extends State {
 			}
 		}
 		this.deactivateState(null, NeutralState);
+	}
+}
+export class DeedOfValorState extends State {
+	onHover() {}
+	instructions1 = "Click Commit to give";
+	instructions2 = "Every other player";
+	instructions3 = null;
+	onClick(x, y) {
+		this._boardState.commitButton.onClick(x, y);
+		this.onPlayerClick(x, y);
+		this.deactivateState("Deed of Valor", NeutralState);
+	}
+	commit() {
+		for (let i = 0; i < this.hand.length; ++i) {
+			if (this.cardIsActive(i, "Deed of Valor")) {
+				for (let j = 0; j < this.hand.length; ++j) {
+					if (this.cardIsActive(j, "Angry Mob")) {
+						if (i > j) {
+							this.currentPlayer.discard(i);
+							this.currentPlayer.removeCard(j);
+							this.currentPlayer._discardPile.push(new Card(library.squire));
+						} else {
+							this.currentPlayer.removeCard(j);
+							this.currentPlayer.discard(i);
+							this.currentPlayer._discardPile.push(new Card(library.squire));
+						}
+					} else if (this.cardIsActive(j, "Squire")) {
+						if (i > j) {
+							this.currentPlayer.discard(i);
+							this.currentPlayer.removeCard(j);
+							this.currentPlayer._discardPile.push(new Card(library.knight));
+						} else {
+							this.currentPlayer.removeCard(j);
+							this.currentPlayer.discard(i);
+							this.currentPlayer._discardPile.push(new Card(library.knight));
+						}
+					}
+				}
+			}
+		}
 	}
 }

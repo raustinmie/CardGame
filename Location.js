@@ -57,6 +57,36 @@ export class Location {
 	cardTopOffest = 25;
 	activeOffset = 10;
 
+	activateCard(x, y) {
+		for (let j = 0; j < this._defensiveCards.length; ++j) {
+			const cardX =
+				this._box.left - this.cardOffset * (this._defensiveCards.length - j);
+			const cardY = this._box.top - this.cardTopOffest;
+
+			if (
+				this._defensiveCards[j].contains(x, y, cardX, cardY) &&
+				!this._box.contains(x, y) &&
+				(j === this._defensiveCards.length - 1 ||
+					!this._defensiveCards[j + 1].contains(
+						x,
+						y,
+						cardX + this.cardOffset,
+						cardY
+					))
+			) {
+				for (let k = 0; k < locations.length; ++k) {
+					for (let i = 0; i < this._defensiveCards.length; ++i) {
+						if (this != locations[k] || i != j) {
+							locations[k]._activeCards[i] = false;
+							console.log(locations[k]);
+						}
+					}
+				}
+				this._activeCards[j] = toggle(this._activeCards[j]);
+				console.log(this._activeCards[j]);
+			}
+		}
+	}
 	attack(player) {
 		if (this._underAttack) {
 			if (player.turnPower > this._defensivePower) {
@@ -121,11 +151,10 @@ export class Location {
 	}
 
 	onClick(x, y, state) {
+		this.activateCard(x, y);
 		if (this._box.contains(x, y)) {
 			this._underAttack = toggle(this._underAttack);
-			for (let i = 0; i < state.currentPlayer.hand.length; ++i) {
-				state.currentPlayer.activeCards[i] = false;
-			}
+			state.currentPlayer.deactivateCards();
 			state.turnState = new AttackState(state);
 		} else if (
 			this._storesVisible &&
@@ -134,35 +163,6 @@ export class Location {
 		) {
 			for (let store of this._stores) {
 				store.onClick(x, y, state);
-			}
-		}
-
-		for (let j = 0; j < this._defensiveCards.length; ++j) {
-			const cardX =
-				this._box.left - this.cardOffset * (this._defensiveCards.length - j);
-			const cardY = this._box.top - this.cardTopOffest;
-
-			if (
-				this._defensiveCards[j].contains(x, y, cardX, cardY) &&
-				!this._box.contains(x, y) &&
-				(j === this._defensiveCards.length - 1 ||
-					!this._defensiveCards[j + 1].contains(
-						x,
-						y,
-						cardX + this.cardOffset,
-						cardY
-					))
-			) {
-				for (let k = 0; k < locations.length; ++k) {
-					for (let i = 0; i < this._defensiveCards.length; ++i) {
-						if (this != locations[k] || i != j) {
-							locations[k]._activeCards[i] = false;
-							console.log(locations[k]);
-						}
-					}
-				}
-				this._activeCards[j] = toggle(this._activeCards[j]);
-				console.log(this._activeCards[j]);
 			}
 		}
 	}
@@ -177,7 +177,7 @@ export class Location {
 				this._underAttack = false;
 				state.turnState = new NeutralState(state);
 			}
-			state._currentPlayer.deactivateCards(state._currentPlayer);
+			state._currentPlayer.deactivateCards();
 		}
 	}
 	draw(ctx) {

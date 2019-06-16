@@ -29,16 +29,16 @@ export class Player {
 		// for (let j = 0; j < 1; ++j) {
 		// 	this.addToDeck(new Card(library.foodCache));
 		// }
-		for (let j = 0; j < 1; ++j) {
-			this.addToDeck(new Card(library.priest));
-		}
-		for (let j = 0; j < 4; ++j) {
-			this.addToDeck(new Card(library.callToArms));
+		// for (let j = 0; j < 1; ++j) {
+		// 	this.addToDeck(new Card(library.priest));
+		// }
+		for (let j = 0; j < 2; ++j) {
+			this.addToDeck(new Card(library.deedOfValor));
 		}
 		for (let j = 0; j < 2; ++j) {
-			this.addToDeck(new Card(library.youngFarmhand));
+			this.addToDeck(new Card(library.squire));
 		}
-		for (let j = 0; j < 3; ++j) {
+		for (let j = 0; j < 1; ++j) {
 			this.addToDeck(new Card(library.angryMob));
 		}
 	}

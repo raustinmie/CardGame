@@ -4,7 +4,12 @@ import { Store } from "./Store.js";
 import { Card } from "./Card.js";
 import { Location } from "./Location.js";
 import { Button } from "./util.js";
-import { AttackState, BuyState, NeutralState } from "./TurnStates.js";
+import {
+	AttackState,
+	BuyState,
+	NeutralState,
+	MasterSmithState
+} from "./TurnStates.js";
 
 export const locations = [
 	new Location(
@@ -112,37 +117,36 @@ export class BoardState {
 	}
 
 	draw(ctx) {
-		ctx.fillStyle = "black";
-		ctx.textAlign = "left";
-		ctx.fillText(this._turnState.instructions1, 10, 40);
-		if (this._turnState.instructions2) {
-			ctx.fillText(this._turnState.instructions2, 10, 55);
-		}
-		if (this._turnState.instructions3) {
-			ctx.fillText(this._turnState.instructions3, 10, 70);
-		}
-		ctx.strokeStyle = "black";
-		ctx.textBaseline = "middle";
-		ctx.textAlign = "center";
-		ctx.font = `12px`;
+		if (this._turnState === MasterSmithState) {
+		} else {
+			ctx.fillStyle = "black";
+			ctx.textAlign = "left";
+			ctx.fillText(this._turnState.instructions1, 10, 40);
+			if (this._turnState.instructions2) {
+				ctx.fillText(this._turnState.instructions2, 10, 55);
+			}
+			if (this._turnState.instructions3) {
+				ctx.fillText(this._turnState.instructions3, 10, 70);
+			}
+			ctx.strokeStyle = "black";
+			ctx.textBaseline = "middle";
+			ctx.textAlign = "center";
+			ctx.font = `12px`;
 
-		for (let i = 0; i < this._players.length; ++i) {
-			// 	ctx.translate(400, 400);
-			// 	ctx.rotate((Math.PI / 2) * i);
-			// 	ctx.translate(-400, -400);
-			this._players[i].draw(ctx);
-			//	ctx.setTransform(1, 0, 0, 1, 0, 0);
-		}
+			for (let i = 0; i < this._players.length; ++i) {
+				this._players[i].draw(ctx);
+				//	ctx.setTransform(1, 0, 0, 1, 0, 0);
+			}
 
-		for (let location of locations) {
-			location.draw(ctx);
-		}
+			for (let location of locations) {
+				location.draw(ctx);
+			}
 
-		for (let store of stores) {
-			store.draw(ctx);
+			for (let store of stores) {
+				store.draw(ctx);
+			}
+			this.endTurnButton.draw(ctx);
 		}
-		this.endTurnButton.draw(ctx);
-
 		this.commitButton.draw(ctx);
 	}
 

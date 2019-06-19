@@ -1,7 +1,8 @@
 import { Card } from "./Card.js";
 import { Box, toggle } from "./util.js";
-import { NeutralState, BuyState } from "./TurnStates.js";
+import { NeutralState } from "./TurnStates.js";
 import { stores, locations } from "./BoardState.js";
+import { BuyState } from "./BuyState.js";
 
 const cardWidth = 50;
 const cardHeight = 100;

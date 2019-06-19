@@ -4,12 +4,8 @@ import { Store } from "./Store.js";
 import { Card } from "./Card.js";
 import { Location } from "./Location.js";
 import { Button } from "./util.js";
-import {
-	AttackState,
-	BuyState,
-	NeutralState,
-	MasterSmithState
-} from "./TurnStates.js";
+
+import { NeutralState, MasterSmithState } from "./TurnStates.js";
 
 export const locations = [
 	new Location(
@@ -117,7 +113,8 @@ export class BoardState {
 	}
 
 	draw(ctx) {
-		if (this._turnState === MasterSmithState) {
+		if (this._turnState instanceof MasterSmithState) {
+			this.currentPlayer.discardPileDraw(ctx);
 		} else {
 			ctx.fillStyle = "black";
 			ctx.textAlign = "left";

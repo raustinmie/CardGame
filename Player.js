@@ -32,13 +32,13 @@ export class Player {
 		// for (let j = 0; j < 1; ++j) {
 		// 	this.addToDeck(new Card(library.priest));
 		// }
-		for (let j = 0; j < 2; ++j) {
-			this.addToDeck(new Card(library.deedOfValor));
+		for (let j = 0; j < 3; ++j) {
+			this.addToDeck(new Card(library.fireAndBrimstone));
 		}
 		for (let j = 0; j < 2; ++j) {
-			this.addToDeck(new Card(library.squire));
+			this.addToDeck(new Card(library.fasting));
 		}
-		for (let j = 0; j < 1; ++j) {
+		for (let j = 0; j < 3; ++j) {
 			this.addToDeck(new Card(library.angryMob));
 		}
 	}
@@ -238,5 +238,21 @@ export class Player {
 		}
 		// ctx.translate(x, y);
 		ctx.restore();
+	}
+
+	discardPileDraw(ctx) {
+		let horizontalOffset = 60;
+		let verticalOffset = 110;
+		let numberPerRow = 7;
+		for (let i = 0; i < this._discardPile.length; ++i) {
+			let y = Math.floor(i / numberPerRow);
+			let x = i % numberPerRow;
+			this._discardPile[x].draw(
+				ctx,
+				200 + horizontalOffset * x,
+				100 + verticalOffset * y,
+				"white"
+			);
+		}
 	}
 }

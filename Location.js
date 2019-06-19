@@ -1,9 +1,8 @@
 import { Box, toggle } from "./util.js";
 import { Store } from "./Store.js";
-import { NeutralState, AttackState } from "./TurnStates.js";
+import { NeutralState } from "./TurnStates.js";
+import { AttackState } from "./AttackState.js";
 import { locations } from "./BoardState.js";
-import { Card } from "./Card.js";
-import { library } from "./CardLibrary.js";
 
 export class Location {
 	constructor(x, y, name, store1, store2, store3, store4) {

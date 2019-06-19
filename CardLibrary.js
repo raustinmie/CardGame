@@ -1,5 +1,3 @@
-import { Card } from "./Card.js";
-import { BoardState } from "./BoardState.js";
 import {
 	NeutralState,
 	StarveEmOutState,
@@ -27,7 +25,7 @@ export const library = {
 		power: 1,
 		effect: null,
 		afterAttack: "defend",
-		attackEffect: null
+		cardText: null
 	},
 	oldFarmer: {
 		cost: 1,
@@ -36,7 +34,7 @@ export const library = {
 		power: 0,
 		effect: null,
 		afterAttack: "defend",
-		attackEffect: null
+		cardText: null
 	},
 	general: {
 		cost: 6,
@@ -45,7 +43,7 @@ export const library = {
 		power: 3,
 		effect: undefined /*-1 per angry mob*/,
 		afterAttack: "defend",
-		attackEffect: null
+		cardText: null
 	},
 	starvation: {
 		cost: 0,
@@ -54,7 +52,7 @@ export const library = {
 		power: -1,
 		effect: null,
 		afterAttack: "discard",
-		attackEffect: null
+		cardText: null
 	},
 	loot: {
 		cost: 3,
@@ -63,7 +61,7 @@ export const library = {
 		power: 0,
 		effect: null,
 		afterAttack: null,
-		attackEffect: null
+		cardText: null
 	},
 	//FARM CARDS
 	foodCache: {
@@ -75,7 +73,7 @@ export const library = {
 			newState(boardState, isActive, FoodCacheState, NeutralState);
 		}, // Trash a starvation card - COMPLETE
 		afterAttack: null,
-		attackEffect: null
+		cardText: "Trash a starvation card"
 	},
 	youngFarmhand: {
 		cost: 4,
@@ -84,7 +82,7 @@ export const library = {
 		power: 1,
 		effect: null,
 		afterAttack: "defend",
-		attackEffect: null
+		cardText: null
 	},
 	millersDaughter: {
 		cost: 5,
@@ -95,7 +93,7 @@ export const library = {
 			newState(boardState, isActive, MillersDaughterState, NeutralState);
 		}, //remove an enemy card from a location - COMPLETE
 		afterAttack: "discard",
-		attackEffect: null
+		cardText: "Remove a card from a location"
 	},
 	starveEmOut: {
 		cost: 6,
@@ -106,11 +104,9 @@ export const library = {
 			newState(boardState, isActive, StarveEmOutState, NeutralState);
 		},
 		/*Each other player gains a starvation card - COMPLETE*/
-
 		afterAttack: "discard",
-		attackEffect: null
+		cardText: "Give each other player a starvation card"
 	},
-
 	//WORKSHOP CARDS
 	boilingOil: {
 		cost: 2,
@@ -119,7 +115,7 @@ export const library = {
 		power: 3,
 		effect: null, //one use only
 		afterAttack: "trash",
-		attackEffect: null
+		cardText: "One use only"
 	},
 	apprentice: {
 		cost: 4,
@@ -128,9 +124,10 @@ export const library = {
 		power: 2,
 		effect: null,
 		afterAttack: "defend",
-		attackEffect: null
+		cardText: null
 	},
 	masterSmith: {
+		// COMPLETE
 		cost: 5,
 		name: "Master Smith",
 		gold: 3,
@@ -139,7 +136,7 @@ export const library = {
 			newState(boardState, isActive, MasterSmithState, NeutralState);
 		},
 		afterAttack: "defend",
-		attackEffect: null //you may draw a card from the discard pile
+		cardText: "Draw a card from the discard pile"
 	},
 	siegeEngine: {
 		cost: 6,
@@ -148,47 +145,48 @@ export const library = {
 		power: 5,
 		effect: null,
 		afterAttack: "trash",
-		attackEffect: null //single use only - COMPLETE
+		cardText: "One use only"
 	},
 
 	//ABBEY CARDS
 	friar: {
+		// - COMPLETE
 		cost: 3,
 		name: "Friar",
 		gold: 1,
 		power: 1,
 		effect: null,
 		afterAttack: "defend",
-		attackEffect: null //gain an angry mob in your discard pile - COMPLETE
+		cardText: "Add an angry mob to your discard pile"
 	},
 	priest: {
+		// - COMPLETE
 		cost: 4,
 		name: "Priest",
 		gold: 2,
 		power: 0,
 		effect: null,
 		afterAttack: "discard",
-		attackEffect: null //a defending angry mob becomes yours and is attacking - COMPLETE
+		cardText: "A defending angry mob becomes your and is attacking"
 	},
 	fasting: {
+		//COMPLETE
 		cost: 4,
 		name: "Fasting",
 		gold: 0,
 		power: 0,
 		effect: null,
 		afterAttack: "discard",
-		attackEffect: null
-		/*double the strength of all angry mobs (cumulative) - COMPLETE*/
+		cardText: "Double the Strength of all Angry Mobs"
 	},
 	fireAndBrimstone: {
 		cost: 5,
 		name: "Fire and Brimstone",
 		gold: 0,
 		power: 0,
-		effect: undefined,
+		effect: null,
 		afterAttack: "discard",
-		attackEffect: null
-		/*give one angry mob to as many players as you wish*/
+		cardText: "Give an Angry Mob +3 power. Sacrifice it after attacking."
 	},
 
 	//CASTLE CARDS
@@ -201,7 +199,7 @@ export const library = {
 			newState(boardState, isActive, CallToArmsState, NeutralState);
 		}, //Draw 3 cards
 		afterAttack: "discard",
-		attackEffect: null
+		cardText: "Draw 2 Cards"
 	},
 	squire: {
 		cost: 4,
@@ -210,7 +208,7 @@ export const library = {
 		power: 2,
 		effect: null,
 		afterAttack: "defend",
-		attackEffect: null
+		cardText: null
 	},
 	knight: {
 		cost: 6,
@@ -219,7 +217,7 @@ export const library = {
 		power: 4,
 		effect: null,
 		afterAttack: "defend",
-		attackEffect: null
+		cardText: null
 	},
 	deedOfValor: {
 		cost: 7,
@@ -230,6 +228,6 @@ export const library = {
 			newState(boardState, isActive, DeedOfValorState, NeutralState);
 		} /*one angry mob becomes a squire, or one squire becomes a knight*/,
 		afterAttack: "defend",
-		attackEffect: null
+		cardText: "Upgrade an Angry Mob to a Squire or a Squire to a Knight"
 	}
 };

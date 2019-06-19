@@ -9,7 +9,6 @@ export class Card {
 		this._onActivate = card.effect;
 		this._revealed = true;
 		this._afterAttack = card.afterAttack;
-		this._attackEffect = card.attackEffect;
 	}
 	contains(x, y, cardX, cardY) {
 		return x >= cardX && x < cardX + 40 && y >= cardY && y < cardY + 100;
@@ -49,14 +48,6 @@ export class Card {
 
 	get height() {
 		return this._height;
-	}
-
-	activateAttack(boardState, isActive) {
-		if (this._attackEffect) {
-			this._attackEffect(boardState, isActive);
-		} else if (this._attackEffect === undefined) {
-			console.error("Missing Effect");
-		}
 	}
 
 	activate(boardState, isActive) {

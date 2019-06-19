@@ -1,9 +1,9 @@
-import { stores, locations, BoardState, playerData } from "./BoardState.js";
+import { stores, locations, playerData } from "./BoardState.js";
 import { Card } from "./Card.js";
 import { library } from "./CardLibrary.js";
 import { toggle } from "./util.js";
 
-class State {
+export class State {
 	constructor(boardState) {
 		this._boardState = boardState;
 	}
@@ -103,95 +103,6 @@ class State {
 	}
 }
 
-export class AttackState extends State {
-	onHover(x, y) {
-		for (let location of locations) {
-			location.onHover(x, y);
-		}
-	}
-
-	onClick(x, y) {
-		this.onPlayerClick(x, y);
-		this._boardState.commitButton.onClick(x, y);
-
-		for (let location of locations) {
-			location.onAttackClick(x, y, this._boardState);
-		}
-		for (let i = 0; i < this.hand.length; ++i) {
-			if (this.currentPlayer.activeCards[i]) {
-				this.hand[i].activateAttack(this._boardState, this.hand[i].isActive);
-			}
-		}
-		let fastingCards = 0;
-		let angryMobCards = 0;
-		for (let i = 0; i < this.hand.length; ++i) {
-			if (this.cardIsActive(i, "Fasting")) {
-				++fastingCards;
-			} else if (this.cardIsActive(i, "Angry Mob")) {
-				++angryMobCards;
-			}
-		}
-		let fastingPower =
-			angryMobCards * Math.pow(2, fastingCards) - angryMobCards;
-		this.currentPlayer.calculateGold();
-		this.calculatePower();
-		this.currentPlayer.turnPower += fastingPower;
-	}
-	instructions1 = "Activate cards that will attack";
-	instructions2 = null;
-	instructions3 = null;
-
-	commit() {
-		this.attackLocation();
-		this._boardState.turnState = new NeutralState(this._boardState);
-		this.currentPlayer.turnPower = 0;
-		this.currentPlayer.turnPower = 0;
-	}
-}
-
-export class BuyState extends State {
-	onHover(x, y) {
-		for (let location of locations) {
-			location.onHover(x, y);
-		}
-	}
-	onClick(x, y) {
-		this.onPlayerClick(x, y);
-		this._boardState.commitButton.onClick(x, y);
-		for (let store of stores) {
-			store.onBuyClick(x, y, this._boardState);
-		}
-
-		for (let location of locations) {
-			if (location._controlledBy == this.currentPlayer) {
-				for (let i = 0; i < location._stores.length; ++i) {
-					location._stores[i].onBuyClick(x, y, this._boardState);
-				}
-			}
-		}
-		this.currentPlayer.calculateGold();
-		this.calculatePower();
-	}
-	instructions1 = "Activate cards to get money to buy.";
-	instructions2 = null;
-	instructions3 = null;
-
-	commit() {
-		let store = stores.find(s => s.buying);
-		for (let location of locations) {
-			for (let i = 0; i < location._stores.length; ++i) {
-				if (location._stores[i]._buying) {
-					store = location._stores[i];
-					break;
-				}
-			}
-		}
-		store.buy(this._boardState);
-		this.currentPlayer.turnPower = 0;
-		this.currentPlayer.turnPower = 0;
-	}
-}
-
 export class NeutralState extends State {
 	onHover(x, y) {
 		for (let location of locations) {
@@ -236,23 +147,15 @@ export class FoodCacheState extends State {
 	instructions3 = null;
 	commit() {
 		for (let i = 0; i < this.hand.length; ++i) {
-			if (
-				this.hand[i].name == "Food Cache" &&
-				this.currentPlayer.activeCards[i] == true
-			) {
+			if (this.cardIsActive(i, "Food Cache")) {
 				for (let j = 0; j < this.hand.length; ++j) {
-					if (
-						this.hand[j].name == "Starvation" &&
-						this.currentPlayer.activeCards[j]
-					) {
+					if (this.cardIsActive(j, "Starvation")) {
 						if (i > j) {
 							//get rid of the higher index card first so the other index will not be altered.
 							this.currentPlayer.discard(i);
-							this.hand.splice(j, 1);
-							this.currentPlayer.activeCards.splice(j, 1);
+							this.currentPlayer.removeCard(j);
 						} else {
-							this.hand.splice(j, 1);
-							this.currentPlayer.activeCards.splice(j, 1);
+							this.currentPlayer.removeCard(j);
 							this.currentPlayer.discard(i);
 						}
 					}
@@ -293,9 +196,9 @@ export class StarveEmOutState extends State {
 }
 
 export class MillersDaughterState extends State {
-	instructions1 = "Click Commit to give";
-	instructions2 = "Every other player";
-	instructions3 = null;
+	instructions1 = "Select a card and";
+	instructions2 = "click commit to remove";
+	instructions3 = "it from a location.";
 	onClick(x, y) {
 		this._boardState.commitButton.onClick(x, y);
 		this.onPlayerClick(x, y);
@@ -330,47 +233,31 @@ export class MillersDaughterState extends State {
 	}
 }
 export class MasterSmithState extends State {
+	onHover() {}
 	onClick(x, y) {
 		this._boardState.commitButton.onClick(x, y);
-	}
-
-	initiateActiveCards() {
-		let j = 0;
-		for (let i = 1; i < this.currentPlayer._discardPile.length; ++i) {
-			this._activeCards[j].push(false);
-			if (i % 7 == 0) {
-				this._activeCards.push([]);
-				++j;
-			}
-		}
-	}
-
-	draw(ctx) {
-		if (this.currentPlayer._discardPile.length != 0) {
-			let color = "white";
-			for (
-				let row = 0;
-				row < this.currentPlayer._discardPile.length / 7;
-				++row
-			) {
-				for (
-					let column = 0;
-					column < this.currentPlayer._discardPile.length && column < 7;
-					++column
-				) {
-					if (this._activeCards[i][j] == true) {
-						color = "green";
+		let horizontalOffset = 60;
+		let verticalOffset = 110;
+		let numberPerRow = 7;
+		for (let i = 0; i < this.currentPlayer._discardPile.length; ++i) {
+			let countY = Math.floor(i / numberPerRow);
+			let countX = i % numberPerRow;
+			let cardX = 200 + horizontalOffset * countX;
+			let cardY = 100 + verticalOffset * countY;
+			if (this.currentPlayer._discardPile[i].contains(x, y, cardX, cardY)) {
+				this.hand.push(this.currentPlayer._discardPile[i]);
+				this.currentPlayer.activeCards.push(false);
+				this.currentPlayer._discardPile.splice(i, 1);
+				for (let j = 0; j < this.hand.length; ++j) {
+					if (this.cardIsActive(j, "Master Smith")) {
+						this.currentPlayer.discard(j);
 					}
-					this.currentPlayer._discardPile[column].draw(
-						ctx,
-						150 + 60 * column,
-						150 + 100 * row,
-						color
-					);
 				}
 			}
 		}
+		this.deactivateState(null, NeutralState);
 	}
+	//TODO: Click to activate cards, make cancel button, commit click
 }
 export class CallToArmsState extends State {
 	instructions1 = "Click Commit to give";
@@ -393,9 +280,9 @@ export class CallToArmsState extends State {
 }
 export class DeedOfValorState extends State {
 	onHover() {}
-	instructions1 = "Click Commit to give";
-	instructions2 = "Every other player";
-	instructions3 = null;
+	instructions1 = "Select an Angry Mob or";
+	instructions2 = "Squire to upgrade it to";
+	instructions3 = "a Squire or Knight";
 	onClick(x, y) {
 		this._boardState.commitButton.onClick(x, y);
 		this.onPlayerClick(x, y);

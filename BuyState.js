@@ -1,11 +1,7 @@
 import { State } from "./TurnStates.js";
+import { stores, locations } from "./BoardState.js";
 
 export class BuyState extends State {
-	onHover(x, y) {
-		for (let location of locations) {
-			location.onHover(x, y);
-		}
-	}
 	onClick(x, y) {
 		this.onPlayerClick(x, y);
 		this._boardState.commitButton.onClick(x, y);

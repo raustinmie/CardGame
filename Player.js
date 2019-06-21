@@ -92,6 +92,17 @@ export class Player {
 		}
 	}
 
+	onHover(x, y) {
+		for (let i = 0; i < this.hand.length; ++i) {
+			let cardX = this.box.left + handOffset + cardOffset * i;
+			let cardY = this.box.top + verticalOffset;
+			if (this.hand[i].contains(x, y, cardX, cardY)) {
+				this.hand[i].hovering = true;
+			} else {
+				this.hand[i].hovering = false;
+			}
+		}
+	}
 	removeCard(index) {
 		this.hand.splice(index, 1);
 		this.activeCards.splice(index, 1);
@@ -182,7 +193,7 @@ export class Player {
 		ctx.strokeStyle = "black";
 		ctx.textBaseline = "middle";
 		ctx.textAlign = "center";
-		ctx.font = `12px`;
+		ctx.font = `10px sans-serif`;
 		ctx.fillStyle = this._playerColor;
 		ctx.fillRect(x, y, w, h);
 
@@ -215,24 +226,48 @@ export class Player {
 				);
 			}
 			for (let i = 0; i < this._hand.length; ++i) {
-				if (!this._activeCards[i]) {
-					this._hand[i].draw(
-						ctx,
-						x + handOffset + cardOffset * i,
-						y + verticalOffset,
-						this._cardColor
-					);
-				} else {
-					this._hand[i].draw(
-						ctx,
-						x + handOffset + cardOffset * i,
-						y + activeOffset,
-						this._cardColor
-					);
+				if (!this.hand[i].hovering) {
+					if (!this._activeCards[i]) {
+						this._hand[i].draw(
+							ctx,
+							x + handOffset + cardOffset * i,
+							y + verticalOffset,
+							this._cardColor
+						);
+					} else if (this._activeCards[i]) {
+						this._hand[i].draw(
+							ctx,
+							x + handOffset + cardOffset * i,
+							y + activeOffset,
+							this._cardColor
+						);
+					}
+				}
+			}
+			for (let i = 0; i < this._hand.length; ++i) {
+				if (this._hand[i].hovering) {
+					if (this.hand[i].hovering) {
+						if (!this._activeCards[i]) {
+							this._hand[i].draw(
+								ctx,
+								x + handOffset + cardOffset * i,
+								y + verticalOffset,
+								this._cardColor
+							);
+						} else if (this._activeCards[i]) {
+							this._hand[i].draw(
+								ctx,
+								x + handOffset + cardOffset * i,
+								y + activeOffset,
+								this._cardColor
+							);
+						}
+					}
 				}
 			}
 
 			ctx.fillStyle = "black";
+			ctx.font = "10px sans-serif";
 			ctx.fillText(`Gold:${this._turnGold}`, x + 420, y + 30);
 			ctx.fillText(`Power:${this._turnPower}`, x + 420, y + 60);
 		}

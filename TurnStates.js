@@ -20,6 +20,15 @@ export class State {
 		return this.currentPlayer.hand;
 	}
 
+	onHover(x, y) {
+		for (let location of locations) {
+			location.onHover(x, y);
+		}
+		for (let player of this._boardState.players) {
+			player.onHover(x, y);
+		}
+	}
+
 	cardIsActive(i, cardName) {
 		if (this.hand[i].name === cardName && this.currentPlayer._activeCards[i]) {
 			return true;
@@ -103,39 +112,6 @@ export class State {
 	}
 }
 
-export class NeutralState extends State {
-	onHover(x, y) {
-		for (let location of locations) {
-			location.onHover(x, y);
-		}
-	}
-	onClick(x, y) {
-		this.onPlayerClick(x, y);
-
-		for (let store of stores) {
-			store.onClick(x, y, this._boardState);
-		}
-
-		for (let location of locations) {
-			location.onClick(x, y, this._boardState, this._boardState._currentPlayer);
-		}
-		for (let i = 0; i < this.hand.length; ++i) {
-			if (this.currentPlayer.activeCards[i]) {
-				this.hand[i].act;
-			}
-		}
-		this._boardState.endTurnButton.onClick(x, y);
-	}
-	instructions1 = "Select a location to attack OR";
-	instructions2 = "Select a store to buy from OR";
-	instructions3 = "Select a card to play it";
-	activateCard(card, isActive) {
-		if (isActive) {
-			card.activate(this._boardState);
-		} else {
-		}
-	}
-}
 export class FoodCacheState extends State {
 	onClick(x, y) {
 		this._boardState.commitButton.onClick(x, y);
@@ -215,7 +191,6 @@ export class MillersDaughterState extends State {
 			) {
 				for (let j = 0; j < locations.length - 1; ++j) {
 					for (let k = 0; k < locations[j]._defensiveCards.length; ++k) {
-						console.log(locations[j].activeCards[k]);
 						if (locations[j]._activeCards[k]) {
 							locations[j]._controlledBy._discardPile.push(
 								locations[j]._defensiveCards[k]
@@ -233,7 +208,6 @@ export class MillersDaughterState extends State {
 	}
 }
 export class MasterSmithState extends State {
-	onHover() {}
 	onClick(x, y) {
 		this._boardState.commitButton.onClick(x, y);
 		let horizontalOffset = 60;
@@ -279,7 +253,6 @@ export class CallToArmsState extends State {
 	}
 }
 export class DeedOfValorState extends State {
-	onHover() {}
 	instructions1 = "Select an Angry Mob or";
 	instructions2 = "Squire to upgrade it to";
 	instructions3 = "a Squire or Knight";

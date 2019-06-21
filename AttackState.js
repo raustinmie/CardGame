@@ -1,15 +1,9 @@
 import { State } from "./Turnstates.js";
-import { locations } from "./BoardState.js";
-import { library } from "./CardLibrary.js";
+import { locations, BoardState } from "./BoardState.js";
+import { NeutralState } from "./NeutralState.js";
 import { Card } from "./Card.js";
 
 export class AttackState extends State {
-	onHover(x, y) {
-		for (let location of locations) {
-			location.onHover(x, y);
-		}
-	}
-
 	onClick(x, y) {
 		this.onPlayerClick(x, y);
 		this._boardState.commitButton.onClick(x, y);
@@ -28,7 +22,6 @@ export class AttackState extends State {
 				++angryMobCards;
 			} else if (this.cardIsActive(i, "Fire and Brimstone")) {
 				++fireAndBrimstoneCards;
-				console.log("Fire and Brimstone active");
 			}
 		}
 		let numberOfMobBrimstonePairs = 0;

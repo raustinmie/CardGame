@@ -1,5 +1,4 @@
 import {
-	NeutralState,
 	StarveEmOutState,
 	FoodCacheState,
 	MillersDaughterState,
@@ -7,6 +6,7 @@ import {
 	CallToArmsState,
 	DeedOfValorState
 } from "./TurnStates.js";
+import { NeutralState } from "./NeutralState.js";
 
 function newState(boardState, isActive, ChangeTo, ElseState) {
 	if (!isActive) {
@@ -21,6 +21,7 @@ export const library = {
 	angryMob: {
 		cost: 1,
 		name: "Angry Mob",
+		name2: null,
 		gold: 0,
 		power: 1,
 		effect: null,
@@ -39,6 +40,7 @@ export const library = {
 	general: {
 		cost: 6,
 		name: "General",
+		name2: null,
 		gold: 3,
 		power: 3,
 		effect: undefined /*-1 per angry mob*/,
@@ -48,6 +50,7 @@ export const library = {
 	starvation: {
 		cost: 0,
 		name: "Starvation",
+		name2: null,
 		gold: -1,
 		power: -1,
 		effect: null,
@@ -57,6 +60,7 @@ export const library = {
 	loot: {
 		cost: 3,
 		name: "Loot",
+		name2: null,
 		gold: 2,
 		power: 0,
 		effect: null,
@@ -67,6 +71,7 @@ export const library = {
 	foodCache: {
 		cost: 2,
 		name: "Food Cache",
+		name2: null,
 		gold: 0,
 		power: 0,
 		effect: (boardState, isActive) => {
@@ -78,6 +83,7 @@ export const library = {
 	youngFarmhand: {
 		cost: 4,
 		name: "Young Farmhand",
+		name2: null,
 		gold: 2,
 		power: 1,
 		effect: null,
@@ -86,7 +92,8 @@ export const library = {
 	},
 	millersDaughter: {
 		cost: 5,
-		name: "Miller's Daughter",
+		name: "Miller's",
+		name2: "Daughter",
 		gold: 2,
 		power: 0,
 		effect: (boardState, isActive) => {
@@ -97,7 +104,8 @@ export const library = {
 	},
 	starveEmOut: {
 		cost: 6,
-		name: "Starve 'em Out!",
+		name: "Starve",
+		name2: "'em Out!",
 		gold: 0,
 		power: 0,
 		effect: (boardState, isActive) => {
@@ -111,6 +119,7 @@ export const library = {
 	boilingOil: {
 		cost: 2,
 		name: "Boiling Oil",
+		name2: null,
 		gold: 0,
 		power: 3,
 		effect: null, //one use only
@@ -120,6 +129,7 @@ export const library = {
 	apprentice: {
 		cost: 4,
 		name: "Apprentice",
+		name2: null,
 		gold: 2,
 		power: 2,
 		effect: null,
@@ -130,6 +140,7 @@ export const library = {
 		// COMPLETE
 		cost: 5,
 		name: "Master Smith",
+		name2: null,
 		gold: 3,
 		power: 1,
 		effect: (boardState, isActive) => {
@@ -141,6 +152,7 @@ export const library = {
 	siegeEngine: {
 		cost: 6,
 		name: "Siege Engine",
+		name2: null,
 		gold: 0,
 		power: 5,
 		effect: null,
@@ -153,6 +165,7 @@ export const library = {
 		// - COMPLETE
 		cost: 3,
 		name: "Friar",
+		name2: null,
 		gold: 1,
 		power: 1,
 		effect: null,
@@ -163,6 +176,7 @@ export const library = {
 		// - COMPLETE
 		cost: 4,
 		name: "Priest",
+		name2: null,
 		gold: 2,
 		power: 0,
 		effect: null,
@@ -173,6 +187,7 @@ export const library = {
 		//COMPLETE
 		cost: 4,
 		name: "Fasting",
+		name2: null,
 		gold: 0,
 		power: 0,
 		effect: null,
@@ -181,7 +196,8 @@ export const library = {
 	},
 	fireAndBrimstone: {
 		cost: 5,
-		name: "Fire and Brimstone",
+		name: "Fire and",
+		name2: "Brimstone",
 		gold: 0,
 		power: 0,
 		effect: null,
@@ -193,6 +209,7 @@ export const library = {
 	callToArms: {
 		cost: 4,
 		name: "Call To Arms",
+		name2: null,
 		gold: 0,
 		power: 0,
 		effect: (boardState, isActive) => {
@@ -204,6 +221,7 @@ export const library = {
 	squire: {
 		cost: 4,
 		name: "Squire",
+		name2: null,
 		gold: 1,
 		power: 2,
 		effect: null,
@@ -213,6 +231,7 @@ export const library = {
 	knight: {
 		cost: 6,
 		name: "Knight",
+		name2: null,
 		gold: 3,
 		power: 4,
 		effect: null,
@@ -222,6 +241,7 @@ export const library = {
 	deedOfValor: {
 		cost: 7,
 		name: "Deed of Valor",
+		name2: null,
 		gold: 0,
 		power: 0,
 		effect: (boardState, isActive) => {

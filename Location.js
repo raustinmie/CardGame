@@ -1,6 +1,6 @@
 import { Box, toggle } from "./util.js";
 import { Store } from "./Store.js";
-import { NeutralState } from "./TurnStates.js";
+import { NeutralState } from "./NeutralState.js";
 import { AttackState } from "./AttackState.js";
 import { locations } from "./BoardState.js";
 
@@ -77,12 +77,10 @@ export class Location {
 					for (let i = 0; i < this._defensiveCards.length; ++i) {
 						if (this != locations[k] || i != j) {
 							locations[k]._activeCards[i] = false;
-							console.log(locations[k]);
 						}
 					}
 				}
 				this._activeCards[j] = toggle(this._activeCards[j]);
-				console.log(this._activeCards[j]);
 			}
 		}
 	}
@@ -141,6 +139,17 @@ export class Location {
 		if (!this._storeBox.contains(x, y)) {
 			this._storesVisible = false;
 		}
+		for (let card of this._defensiveCards) {
+			let cardX =
+				this._box.left - (this._defensiveCards.length - card) * this.cardOffset;
+			let cardY = this._box.top - this.cardTopOffest;
+			if (card.contains(x, y)) {
+				card.hovering = true;
+			}
+			if (!card.contains(x, y)) {
+				card.hovering = false;
+			}
+		}
 	}
 
 	deactivateCards(location) {
@@ -191,7 +200,6 @@ export class Location {
 						"white"
 					);
 				} else {
-					console.log(this._defensiveCards[i]);
 					this._defensiveCards[i].draw(
 						ctx,
 						this._box.left -

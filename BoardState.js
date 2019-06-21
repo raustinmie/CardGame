@@ -1,11 +1,10 @@
 import { Player } from "./Player.js";
 import { library } from "./CardLibrary.js";
 import { Store } from "./Store.js";
-import { Card } from "./Card.js";
 import { Location } from "./Location.js";
 import { Button } from "./util.js";
-
-import { NeutralState, MasterSmithState } from "./TurnStates.js";
+import { NeutralState } from "./NeutralState.js";
+import { MasterSmithState } from "./TurnStates.js";
 
 export const locations = [
 	new Location(
@@ -130,17 +129,16 @@ export class BoardState {
 			ctx.textAlign = "center";
 			ctx.font = `12px`;
 
-			for (let i = 0; i < this._players.length; ++i) {
-				this._players[i].draw(ctx);
-				//	ctx.setTransform(1, 0, 0, 1, 0, 0);
-			}
-
 			for (let location of locations) {
 				location.draw(ctx);
 			}
 
 			for (let store of stores) {
 				store.draw(ctx);
+			}
+			for (let i = 0; i < this._players.length; ++i) {
+				this._players[i].draw(ctx);
+				//	ctx.setTransform(1, 0, 0, 1, 0, 0);
 			}
 			this.endTurnButton.draw(ctx);
 		}

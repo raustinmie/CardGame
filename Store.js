@@ -1,6 +1,6 @@
 import { Card } from "./Card.js";
 import { Box, toggle } from "./util.js";
-import { NeutralState } from "./TurnStates.js";
+import { NeutralState } from "./NeutralState.js";
 import { stores, locations } from "./BoardState.js";
 import { BuyState } from "./BuyState.js";
 

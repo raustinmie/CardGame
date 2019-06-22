@@ -39,7 +39,7 @@ export class Player {
 			this.addToDeck(new Card(library.fasting));
 		}
 		for (let j = 0; j < 3; ++j) {
-			this.addToDeck(new Card(library.angryMob));
+			this.addToDeck(new Card(library.friar));
 		}
 	}
 

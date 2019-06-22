@@ -26,7 +26,10 @@ export const library = {
 		power: 1,
 		effect: null,
 		afterAttack: "defend",
-		cardText: null
+		cardText: null,
+		cardText2: null,
+		cardText3: null,
+		cardText4: null
 	},
 	oldFarmer: {
 		cost: 1,
@@ -35,7 +38,10 @@ export const library = {
 		power: 0,
 		effect: null,
 		afterAttack: "defend",
-		cardText: null
+		cardText: null,
+		cardText2: null,
+		cardText3: null,
+		cardText4: null
 	},
 	general: {
 		cost: 6,
@@ -45,7 +51,10 @@ export const library = {
 		power: 3,
 		effect: undefined /*-1 per angry mob*/,
 		afterAttack: "defend",
-		cardText: null
+		cardText: null,
+		cardText2: null,
+		cardText3: null,
+		cardText4: null
 	},
 	starvation: {
 		cost: 0,
@@ -55,7 +64,10 @@ export const library = {
 		power: -1,
 		effect: null,
 		afterAttack: "discard",
-		cardText: null
+		cardText: null,
+		cardText2: null,
+		cardText3: null,
+		cardText4: null
 	},
 	loot: {
 		cost: 3,
@@ -65,7 +77,10 @@ export const library = {
 		power: 0,
 		effect: null,
 		afterAttack: null,
-		cardText: null
+		cardText: null,
+		cardText2: null,
+		cardText3: null,
+		cardText4: null
 	},
 	//FARM CARDS
 	foodCache: {
@@ -78,7 +93,10 @@ export const library = {
 			newState(boardState, isActive, FoodCacheState, NeutralState);
 		}, // Trash a starvation card - COMPLETE
 		afterAttack: null,
-		cardText: "Trash a starvation card"
+		cardText: "Trash a",
+		cardText2: "starvation card",
+		cardText3: null,
+		cardText4: null
 	},
 	youngFarmhand: {
 		cost: 4,
@@ -88,7 +106,10 @@ export const library = {
 		power: 1,
 		effect: null,
 		afterAttack: "defend",
-		cardText: null
+		cardText: null,
+		cardText2: null,
+		cardText3: null,
+		cardText4: null
 	},
 	millersDaughter: {
 		cost: 5,
@@ -100,7 +121,10 @@ export const library = {
 			newState(boardState, isActive, MillersDaughterState, NeutralState);
 		}, //remove an enemy card from a location - COMPLETE
 		afterAttack: "discard",
-		cardText: "Remove a card from a location"
+		cardText: "Remove a ",
+		cardText2: "card from",
+		cardText3: "a location",
+		cardText4: null
 	},
 	starveEmOut: {
 		cost: 6,
@@ -113,7 +137,10 @@ export const library = {
 		},
 		/*Each other player gains a starvation card - COMPLETE*/
 		afterAttack: "discard",
-		cardText: "Give each other player a starvation card"
+		cardText: "Give each",
+		cardText2: "other player a",
+		cardText3: "starvation card",
+		cardText4: null
 	},
 	//WORKSHOP CARDS
 	boilingOil: {
@@ -124,7 +151,10 @@ export const library = {
 		power: 3,
 		effect: null, //one use only
 		afterAttack: "trash",
-		cardText: "One use only"
+		cardText: "One use only",
+		cardText2: null,
+		cardText3: null,
+		cardText4: null
 	},
 	apprentice: {
 		cost: 4,
@@ -134,7 +164,10 @@ export const library = {
 		power: 2,
 		effect: null,
 		afterAttack: "defend",
-		cardText: null
+		cardText: null,
+		cardText2: null,
+		cardText3: null,
+		cardText4: null
 	},
 	masterSmith: {
 		// COMPLETE
@@ -147,7 +180,10 @@ export const library = {
 			newState(boardState, isActive, MasterSmithState, NeutralState);
 		},
 		afterAttack: "defend",
-		cardText: "Draw a card from the discard pile"
+		cardText: "Draw a card",
+		cardText2: "from the",
+		cardText3: "discard pile",
+		cardText4: null
 	},
 	siegeEngine: {
 		cost: 6,
@@ -157,7 +193,10 @@ export const library = {
 		power: 5,
 		effect: null,
 		afterAttack: "trash",
-		cardText: "One use only"
+		cardText: "One use only",
+		cardText2: null,
+		cardText3: null,
+		cardText4: null
 	},
 
 	//ABBEY CARDS
@@ -170,7 +209,10 @@ export const library = {
 		power: 1,
 		effect: null,
 		afterAttack: "defend",
-		cardText: "Add an angry mob to your discard pile"
+		cardText: "Add an angry mob",
+		cardText2: "to your discard",
+		cardText3: "pile after",
+		cardText4: "attacking"
 	},
 	priest: {
 		// - COMPLETE
@@ -181,7 +223,10 @@ export const library = {
 		power: 0,
 		effect: null,
 		afterAttack: "discard",
-		cardText: "A defending angry mob becomes your and is attacking"
+		cardText: "A defending angry",
+		cardText2: "mob becomes yours",
+		cardText3: "and is attacking",
+		cardText4: null
 	},
 	fasting: {
 		//COMPLETE
@@ -192,7 +237,10 @@ export const library = {
 		power: 0,
 		effect: null,
 		afterAttack: "discard",
-		cardText: "Double the Strength of all Angry Mobs"
+		cardText: "Double the power",
+		cardText2: "of all Angry Mobs",
+		cardText3: "this turn",
+		cardText4: null
 	},
 	fireAndBrimstone: {
 		cost: 5,
@@ -202,7 +250,10 @@ export const library = {
 		power: 0,
 		effect: null,
 		afterAttack: "discard",
-		cardText: "Give an Angry Mob +3 power. Sacrifice it after attacking."
+		cardText: "Give an Angry Mob",
+		cardText2: "+3 power.",
+		cardText3: "Sacrifice it",
+		cardText4: "after attacking."
 	},
 
 	//CASTLE CARDS
@@ -216,7 +267,10 @@ export const library = {
 			newState(boardState, isActive, CallToArmsState, NeutralState);
 		}, //Draw 3 cards
 		afterAttack: "discard",
-		cardText: "Draw 2 Cards"
+		cardText: "Draw 2 Cards",
+		cardText2: null,
+		cardText3: null,
+		cardText4: null
 	},
 	squire: {
 		cost: 4,
@@ -226,7 +280,10 @@ export const library = {
 		power: 2,
 		effect: null,
 		afterAttack: "defend",
-		cardText: null
+		cardText: null,
+		cardText2: null,
+		cardText3: null,
+		cardText4: null
 	},
 	knight: {
 		cost: 6,
@@ -236,7 +293,10 @@ export const library = {
 		power: 4,
 		effect: null,
 		afterAttack: "defend",
-		cardText: null
+		cardText: null,
+		cardText2: null,
+		cardText3: null,
+		cardText4: null
 	},
 	deedOfValor: {
 		cost: 7,
@@ -248,6 +308,9 @@ export const library = {
 			newState(boardState, isActive, DeedOfValorState, NeutralState);
 		} /*one angry mob becomes a squire, or one squire becomes a knight*/,
 		afterAttack: "defend",
-		cardText: "Upgrade an Angry Mob to a Squire or a Squire to a Knight"
+		cardText: "Upgrade an Angry",
+		cardText2: "Mob to a Squire",
+		cardText3: "or a Squire",
+		cardText4: "to a Knight"
 	}
 };

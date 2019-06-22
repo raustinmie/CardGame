@@ -11,6 +11,10 @@ export class Card {
 		this._revealed = true;
 		this._afterAttack = card.afterAttack;
 		this._hovering = false;
+		this._cardText = card.cardText;
+		this._cardText2 = card.cardText2;
+		this._cardText3 = card.cardText3;
+		this._cardText4 = card.cardText4;
 	}
 	contains(x, y, cardX, cardY) {
 		return x >= cardX && x < cardX + 40 && y >= cardY && y < cardY + 100;
@@ -105,9 +109,28 @@ export class Card {
 		ctx.strokeRect(x, y, this._width * scale, this._height * scale);
 		ctx.fillStyle = "black";
 		if (this.revealed) {
+			ctx.fillRect(x + 5 * scale, y + 20 * scale, 40 * scale, 40 * scale);
 			ctx.fillText(this._name, x + 5 * scale, y + 10 * scale);
 			if (this._name2 !== null) {
 				ctx.fillText(this._name2, x + 5 * scale, y + 16 * scale);
+			}
+			if (this.power != -0 || this.gold !== 0) {
+				ctx.fillText(`P:${this.power}`, x + 8 * scale, y + 92 * scale);
+				ctx.fillText(`G:${this.gold}`, x + 20 * scale, y + 92 * scale);
+			}
+			ctx.fillText(`C:${this.cost}`, x + 32 * scale, y + 92 * scale);
+			ctx.font = `${5 * scale}px Arial`;
+			if (this._cardText !== null) {
+				ctx.fillText(this._cardText, x + 5 * scale, y + 65 * scale);
+				if (this._cardText2 !== null) {
+					ctx.fillText(this._cardText2, x + 5 * scale, y + 70 * scale);
+					if (this._cardText3 !== null) {
+						ctx.fillText(this._cardText3, x + 5 * scale, y + 75 * scale);
+						if (this._cardText4 !== null) {
+							ctx.fillText(this._cardText4, x + 5 * scale, y + 80 * scale);
+						}
+					}
+				}
 			}
 		}
 	}

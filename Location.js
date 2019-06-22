@@ -84,6 +84,7 @@ export class Location {
 			}
 		}
 	}
+
 	attack(player) {
 		if (this._underAttack) {
 			if (player.turnPower > this._defensivePower) {
@@ -139,15 +140,14 @@ export class Location {
 		if (!this._storeBox.contains(x, y)) {
 			this._storesVisible = false;
 		}
-		for (let card of this._defensiveCards) {
+		for (let i = 0; i < this._defensiveCards.length; ++i) {
 			let cardX =
-				this._box.left - (this._defensiveCards.length - card) * this.cardOffset;
+				this._box.left - (this._defensiveCards.length - i) * this.cardOffset;
 			let cardY = this._box.top - this.cardTopOffest;
-			if (card.contains(x, y)) {
-				card.hovering = true;
-			}
-			if (!card.contains(x, y)) {
-				card.hovering = false;
+			if (this._defensiveCards[i].contains(x, y, cardX, cardY)) {
+				this._defensiveCards[i].hovering = true;
+			} else {
+				this._defensiveCards[i].hovering = false;
 			}
 		}
 	}

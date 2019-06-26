@@ -108,30 +108,43 @@ export class Card {
 		ctx.fillRect(x, y, this._width * scale, this._height * scale);
 		ctx.strokeRect(x, y, this._width * scale, this._height * scale);
 		ctx.fillStyle = "black";
+		let picX = 5;
+		let picY = 20;
+		let picW = 40;
+		let picH = 40;
+		let nameX = 5;
+		let nameY = 10;
+		let nameY2 = 16;
+		let pX = 8;
+		let gX = 20;
+		let cX = 32;
+		let statsY = 92;
+		let textX = 5;
+		let text1Y = 65;
+		let text2Y = 70;
+		let text3Y = 75;
+		let text4Y = 80;
 		if (this.revealed) {
-			ctx.fillRect(x + 5 * scale, y + 20 * scale, 40 * scale, 40 * scale);
-			ctx.fillText(this._name, x + 5 * scale, y + 10 * scale);
+			ctx.fillRect(
+				x + picX * scale,
+				y + picY * scale,
+				picW * scale,
+				picH * scale
+			);
+			ctx.fillText(this._name, x + nameX * scale, y + nameY * scale);
 			if (this._name2 !== null) {
-				ctx.fillText(this._name2, x + 5 * scale, y + 16 * scale);
+				ctx.fillText(this._name2, x + nameX * scale, y + nameY2 * scale);
 			}
 			if (this.power != -0 || this.gold !== 0) {
-				ctx.fillText(`P:${this.power}`, x + 8 * scale, y + 92 * scale);
-				ctx.fillText(`G:${this.gold}`, x + 20 * scale, y + 92 * scale);
+				ctx.fillText(`P:${this.power}`, x + pX * scale, y + statsY * scale);
+				ctx.fillText(`G:${this.gold}`, x + gX * scale, y + statsY * scale);
 			}
-			ctx.fillText(`C:${this.cost}`, x + 32 * scale, y + 92 * scale);
+			ctx.fillText(`C:${this.cost}`, x + cX * scale, y + statsY * scale);
 			ctx.font = `${5 * scale}px Arial`;
-			if (this._cardText !== null) {
-				ctx.fillText(this._cardText, x + 5 * scale, y + 65 * scale);
-				if (this._cardText2 !== null) {
-					ctx.fillText(this._cardText2, x + 5 * scale, y + 70 * scale);
-					if (this._cardText3 !== null) {
-						ctx.fillText(this._cardText3, x + 5 * scale, y + 75 * scale);
-						if (this._cardText4 !== null) {
-							ctx.fillText(this._cardText4, x + 5 * scale, y + 80 * scale);
-						}
-					}
-				}
-			}
+			ctx.fillText(this._cardText, x + textX * scale, y + text1Y * scale);
+			ctx.fillText(this._cardText2, x + textX * scale, y + text2Y * scale);
+			ctx.fillText(this._cardText3, x + textX * scale, y + text3Y * scale);
+			ctx.fillText(this._cardText4, x + textX * scale, y + text4Y * scale);
 		}
 	}
 }

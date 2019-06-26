@@ -82,7 +82,7 @@ export class Store {
 		ctx.strokeStyle = "black";
 		ctx.textBaseline = "middle";
 		ctx.textAlign = "left";
-		ctx.font = "12px";
+		ctx.font = "10px sans-serif";
 		//this._box.(ctx)
 		if (this._buying) {
 			ctx.fillStyle = "green";

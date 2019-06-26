@@ -4,7 +4,8 @@ import {
 	MillersDaughterState,
 	MasterSmithState,
 	CallToArmsState,
-	DeedOfValorState
+	DeedOfValorState,
+	ReinforcementsState
 } from "./TurnStates.js";
 import { NeutralState } from "./NeutralState.js";
 
@@ -26,10 +27,10 @@ export const library = {
 		power: 1,
 		effect: null,
 		afterAttack: "defend",
-		cardText: null,
-		cardText2: null,
-		cardText3: null,
-		cardText4: null
+		cardText: "",
+		cardText2: "",
+		cardText3: "",
+		cardText4: ""
 	},
 	oldFarmer: {
 		cost: 1,
@@ -38,23 +39,25 @@ export const library = {
 		power: 0,
 		effect: null,
 		afterAttack: "defend",
-		cardText: null,
-		cardText2: null,
-		cardText3: null,
-		cardText4: null
+		cardText: "",
+		cardText2: "",
+		cardText3: "",
+		cardText4: ""
 	},
-	general: {
+	reinforcements: {
 		cost: 6,
-		name: "General",
-		name2: null,
-		gold: 3,
-		power: 3,
-		effect: undefined /*-1 per angry mob*/,
-		afterAttack: "defend",
-		cardText: null,
-		cardText2: null,
-		cardText3: null,
-		cardText4: null
+		name: "Reinforcements",
+		name2: "",
+		gold: 0,
+		power: 0,
+		effect: (boardState, isActive) => {
+			newState(boardState, isActive, ReinforcementsState, NeutralState);
+		},
+		afterAttack: "discard",
+		cardText: "",
+		cardText2: "",
+		cardText3: "",
+		cardText4: ""
 	},
 	starvation: {
 		cost: 0,
@@ -64,10 +67,10 @@ export const library = {
 		power: -1,
 		effect: null,
 		afterAttack: "discard",
-		cardText: null,
-		cardText2: null,
-		cardText3: null,
-		cardText4: null
+		cardText: "",
+		cardText2: "",
+		cardText3: "",
+		cardText4: ""
 	},
 	loot: {
 		cost: 3,
@@ -76,11 +79,11 @@ export const library = {
 		gold: 2,
 		power: 0,
 		effect: null,
-		afterAttack: null,
-		cardText: null,
-		cardText2: null,
-		cardText3: null,
-		cardText4: null
+		afterAttack: "discard",
+		cardText: "",
+		cardText2: "",
+		cardText3: "",
+		cardText4: ""
 	},
 	//FARM CARDS
 	foodCache: {
@@ -95,8 +98,8 @@ export const library = {
 		afterAttack: null,
 		cardText: "Trash a",
 		cardText2: "starvation card",
-		cardText3: null,
-		cardText4: null
+		cardText3: "",
+		cardText4: ""
 	},
 	youngFarmhand: {
 		cost: 4,
@@ -106,10 +109,10 @@ export const library = {
 		power: 1,
 		effect: null,
 		afterAttack: "defend",
-		cardText: null,
-		cardText2: null,
-		cardText3: null,
-		cardText4: null
+		cardText: "",
+		cardText2: "",
+		cardText3: "",
+		cardText4: ""
 	},
 	millersDaughter: {
 		cost: 5,
@@ -124,7 +127,7 @@ export const library = {
 		cardText: "Remove a ",
 		cardText2: "card from",
 		cardText3: "a location",
-		cardText4: null
+		cardText4: ""
 	},
 	starveEmOut: {
 		cost: 6,
@@ -140,7 +143,7 @@ export const library = {
 		cardText: "Give each",
 		cardText2: "other player a",
 		cardText3: "starvation card",
-		cardText4: null
+		cardText4: ""
 	},
 	//WORKSHOP CARDS
 	boilingOil: {
@@ -152,9 +155,9 @@ export const library = {
 		effect: null, //one use only
 		afterAttack: "trash",
 		cardText: "One use only",
-		cardText2: null,
-		cardText3: null,
-		cardText4: null
+		cardText2: "",
+		cardText3: "",
+		cardText4: ""
 	},
 	apprentice: {
 		cost: 4,
@@ -164,10 +167,10 @@ export const library = {
 		power: 2,
 		effect: null,
 		afterAttack: "defend",
-		cardText: null,
-		cardText2: null,
-		cardText3: null,
-		cardText4: null
+		cardText: "",
+		cardText2: "",
+		cardText3: "",
+		cardText4: ""
 	},
 	masterSmith: {
 		// COMPLETE
@@ -183,7 +186,7 @@ export const library = {
 		cardText: "Draw a card",
 		cardText2: "from the",
 		cardText3: "discard pile",
-		cardText4: null
+		cardText4: ""
 	},
 	siegeEngine: {
 		cost: 6,
@@ -194,9 +197,9 @@ export const library = {
 		effect: null,
 		afterAttack: "trash",
 		cardText: "One use only",
-		cardText2: null,
-		cardText3: null,
-		cardText4: null
+		cardText2: "",
+		cardText3: "",
+		cardText4: ""
 	},
 
 	//ABBEY CARDS
@@ -226,7 +229,7 @@ export const library = {
 		cardText: "A defending angry",
 		cardText2: "mob becomes yours",
 		cardText3: "and is attacking",
-		cardText4: null
+		cardText4: ""
 	},
 	fasting: {
 		//COMPLETE
@@ -240,7 +243,7 @@ export const library = {
 		cardText: "Double the power",
 		cardText2: "of all Angry Mobs",
 		cardText3: "this turn",
-		cardText4: null
+		cardText4: ""
 	},
 	fireAndBrimstone: {
 		cost: 5,
@@ -268,9 +271,9 @@ export const library = {
 		}, //Draw 3 cards
 		afterAttack: "discard",
 		cardText: "Draw 2 Cards",
-		cardText2: null,
-		cardText3: null,
-		cardText4: null
+		cardText2: "",
+		cardText3: "",
+		cardText4: ""
 	},
 	squire: {
 		cost: 4,
@@ -280,10 +283,10 @@ export const library = {
 		power: 2,
 		effect: null,
 		afterAttack: "defend",
-		cardText: null,
-		cardText2: null,
-		cardText3: null,
-		cardText4: null
+		cardText: "",
+		cardText2: "",
+		cardText3: "",
+		cardText4: ""
 	},
 	knight: {
 		cost: 6,
@@ -293,10 +296,10 @@ export const library = {
 		power: 4,
 		effect: null,
 		afterAttack: "defend",
-		cardText: null,
-		cardText2: null,
-		cardText3: null,
-		cardText4: null
+		cardText: "",
+		cardText2: "",
+		cardText3: "",
+		cardText4: ""
 	},
 	deedOfValor: {
 		cost: 7,

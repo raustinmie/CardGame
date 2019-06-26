@@ -3,6 +3,7 @@ import { Store } from "./Store.js";
 import { NeutralState } from "./NeutralState.js";
 import { AttackState } from "./AttackState.js";
 import { locations } from "./BoardState.js";
+import { ReinforcementsState } from "./TurnStates.js";
 
 export class Location {
 	constructor(x, y, name, store1, store2, store3, store4) {
@@ -28,6 +29,10 @@ export class Location {
 		this._activeCards = [];
 	}
 
+	get controlledBy() {
+		return this._controlledBy;
+	}
+
 	get stores() {
 		return this._stores;
 	}
@@ -46,6 +51,14 @@ export class Location {
 
 	set defensiveCards(value) {
 		this._defensiveCards = value;
+	}
+
+	get defensivePower() {
+		return this._defensivePower;
+	}
+
+	set defensivePower(value) {
+		this._defensivePower = value;
 	}
 
 	set activeCards(value) {
@@ -160,17 +173,27 @@ export class Location {
 
 	onClick(x, y, state) {
 		this.activateCard(x, y);
-		if (this._box.contains(x, y)) {
-			this._underAttack = toggle(this._underAttack);
-			state.currentPlayer.deactivateCards();
-			state.turnState = new AttackState(state);
-		} else if (
-			this._storesVisible &&
-			this._storeBox.contains(x, y) &&
-			state._currentPlayer == this._controlledBy
-		) {
-			for (let store of this._stores) {
-				store.onClick(x, y, state);
+		if (state.turnState instanceof NeutralState) {
+			if (this._box.contains(x, y)) {
+				this._underAttack = toggle(this._underAttack);
+				state.currentPlayer.deactivateCards();
+				state.turnState = new AttackState(state);
+			} else if (
+				this._storesVisible &&
+				this._storeBox.contains(x, y) &&
+				state._currentPlayer == this._controlledBy
+			) {
+				for (let store of this._stores) {
+					store.onClick(x, y, state);
+				}
+			}
+		} else if (state.turnState instanceof ReinforcementsState) {
+			for (let i = 0; i < locations.length; ++i) {
+				if (!locations[i]._box.contains(x, y)) {
+					locations[i]._underAttack = false;
+				} else {
+					locations[i]._underAttack = toggle(this._underAttack);
+				}
 			}
 		}
 	}
@@ -191,22 +214,24 @@ export class Location {
 	draw(ctx) {
 		if (this._defensiveCards.length !== 0) {
 			for (let i = 0; i < this._defensiveCards.length; ++i) {
-				if (!this._activeCards[i]) {
-					this._defensiveCards[i].draw(
-						ctx,
-						this._box.left -
-							(this._defensiveCards.length - i) * this.cardOffset,
-						this._box.top - this.cardTopOffest,
-						"white"
-					);
-				} else {
-					this._defensiveCards[i].draw(
-						ctx,
-						this._box.left -
-							(this._defensiveCards.length - i) * this.cardOffset,
-						this._box.top - this.cardTopOffest - this.activeOffset,
-						"green"
-					);
+				if (!this._defensiveCards[i].hovering) {
+					if (!this._activeCards[i]) {
+						this._defensiveCards[i].draw(
+							ctx,
+							this._box.left -
+								(this._defensiveCards.length - i) * this.cardOffset,
+							this._box.top - this.cardTopOffest,
+							"white"
+						);
+					} else {
+						this._defensiveCards[i].draw(
+							ctx,
+							this._box.left -
+								(this._defensiveCards.length - i) * this.cardOffset,
+							this._box.top - this.cardTopOffest - this.activeOffset,
+							"green"
+						);
+					}
 				}
 			}
 		}
@@ -226,7 +251,7 @@ export class Location {
 		ctx.fillStyle = "brown";
 		ctx.textBaseline = "middle";
 		ctx.textAlign = "center";
-		ctx.font = "12px";
+		ctx.font = "12px sans-serif";
 
 		if (this._underAttack) {
 			ctx.fillStyle = "red";
@@ -248,6 +273,29 @@ export class Location {
 		if (this._storesVisible) {
 			for (let store of this._stores) {
 				store.draw(ctx, "black");
+			}
+		}
+		if (this._defensiveCards.length !== 0) {
+			for (let i = 0; i < this._defensiveCards.length; ++i) {
+				if (this._defensiveCards[i].hovering) {
+					if (!this._activeCards[i]) {
+						this._defensiveCards[i].draw(
+							ctx,
+							this._box.left -
+								(this._defensiveCards.length - i) * this.cardOffset,
+							this._box.top - this.cardTopOffest,
+							"white"
+						);
+					} else {
+						this._defensiveCards[i].draw(
+							ctx,
+							this._box.left -
+								(this._defensiveCards.length - i) * this.cardOffset,
+							this._box.top - this.cardTopOffest - this.activeOffset,
+							"green"
+						);
+					}
+				}
 			}
 		}
 	}

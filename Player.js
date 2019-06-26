@@ -33,10 +33,10 @@ export class Player {
 		// 	this.addToDeck(new Card(library.priest));
 		// }
 		for (let j = 0; j < 3; ++j) {
-			this.addToDeck(new Card(library.fireAndBrimstone));
+			this.addToDeck(new Card(library.angryMob));
 		}
 		for (let j = 0; j < 2; ++j) {
-			this.addToDeck(new Card(library.fasting));
+			this.addToDeck(new Card(library.reinforcements));
 		}
 		for (let j = 0; j < 3; ++j) {
 			this.addToDeck(new Card(library.friar));

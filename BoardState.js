@@ -47,7 +47,7 @@ export const locations = [
 
 export const stores = [
 	new Store(175, 175, library.angryMob),
-	new Store(575, 175, library.general),
+	new Store(575, 175, library.reinforcements),
 	new Store(175, 525, library.oldFarmer),
 	new Store(575, 525, library.loot)
 ];
@@ -127,7 +127,7 @@ export class BoardState {
 			ctx.strokeStyle = "black";
 			ctx.textBaseline = "middle";
 			ctx.textAlign = "center";
-			ctx.font = `12px`;
+			ctx.font = `10px sans-serif`;
 
 			for (let location of locations) {
 				location.draw(ctx);
@@ -148,11 +148,16 @@ export class BoardState {
 	nextTurn() {
 		for (let i = 0; i < this._currentPlayer.activeCards.length; ++i) {
 			this._currentPlayer.activeCards[i] = false;
+			this._currentPlayer.hand[i].revealed = false;
 		}
 		this._currentPlayer.turnGold = 0;
 		this._currentPlayer.turnPower = 0;
 		this._playerTurn = (this._playerTurn + 1) % 4;
+		// alert(`Player ${this._playerTurn}'s turn`);
 		this._currentPlayer = this._players[this._playerTurn];
+		for (let i = 0; i < this._currentPlayer.hand.length; ++i) {
+			this._currentPlayer.hand[i].revealed = true;
+		}
 		this._currentPlayer.startTurn();
 		console.log(this._playerTurn);
 	}

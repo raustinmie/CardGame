@@ -89,7 +89,7 @@ export class Button {
 		ctx.strokeStyle = "black";
 		ctx.textBaseline = "middle";
 		ctx.textAlign = "center";
-		ctx.font = "12px";
+		ctx.font = "10px sans-serif";
 		ctx.fillStyle = "gray";
 		ctx.fillRect(
 			this._box.left,

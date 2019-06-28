@@ -1,5 +1,5 @@
 import { stores, locations } from "./BoardState.js";
-import { State } from "./Turnstates.js";
+import { State } from "./TurnStates.js";
 
 export class NeutralState extends State {
 	onClick(x, y) {

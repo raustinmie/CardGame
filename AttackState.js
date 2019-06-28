@@ -1,4 +1,4 @@
-import { State } from "./Turnstates.js";
+import { State } from "./TurnStates.js";
 import { locations, BoardState } from "./BoardState.js";
 import { NeutralState } from "./NeutralState.js";
 import { Card } from "./Card.js";

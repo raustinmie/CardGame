@@ -1,6 +1,7 @@
 import { shuffle, Box, toggle } from "./util.js";
 import { Card } from "./Card.js";
 import { library } from "./CardLibrary.js";
+import { locations } from "./BoardState.js";
 
 const cardOffset = 40;
 const handOffset = 90;
@@ -32,15 +33,15 @@ export class Player {
 		// for (let j = 0; j < 1; ++j) {
 		// 	this.addToDeck(new Card(library.priest));
 		// }
-		for (let j = 0; j < 3; ++j) {
-			this.addToDeck(new Card(library.angryMob));
+		for (let j = 0; j < 5; ++j) {
+			this.addToDeck(new Card(library.knight));
 		}
-		for (let j = 0; j < 2; ++j) {
-			this.addToDeck(new Card(library.reinforcements));
-		}
-		for (let j = 0; j < 3; ++j) {
-			this.addToDeck(new Card(library.friar));
-		}
+		// for (let j = 0; j < 2; ++j) {
+		// 	this.addToDeck(new Card(library.withdraw));
+		// }
+		// for (let j = 0; j < 3; ++j) {
+		// 	this.addToDeck(new Card(library.friar));
+		// }
 	}
 
 	get hand() {
@@ -48,7 +49,7 @@ export class Player {
 	}
 
 	get playerNumber() {
-		return this.playerNumber;
+		return this._playerNumber;
 	}
 
 	get playerColor() {
@@ -269,7 +270,14 @@ export class Player {
 			ctx.fillStyle = "black";
 			ctx.font = "10px sans-serif";
 			ctx.fillText(`Gold:${this._turnGold}`, x + 420, y + 30);
-			ctx.fillText(`Power:${this._turnPower}`, x + 420, y + 60);
+			ctx.fillText(`Power:${this._turnPower}`, x + 420, y + 45);
+			ctx.fillText(`Loyalties:`, x + 420, y + 60);
+			for (let i = 0; i < locations.length; ++i) {
+				for (let j = 0; j < locations[i].loyalty.length; ++j)
+					if ((locations[i].loyalty[j] = this._playerNumber)) {
+						ctx.fillText(locations[i]._name, x + 420, y + 75 + 15 * i);
+					}
+			}
 		}
 		// ctx.translate(x, y);
 		ctx.restore();

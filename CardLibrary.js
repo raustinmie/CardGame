@@ -1,12 +1,10 @@
-import {
-	StarveEmOutState,
-	FoodCacheState,
-	MillersDaughterState,
-	MasterSmithState,
-	CallToArmsState,
-	DeedOfValorState,
-	ReinforcementsState
-} from "./TurnStates.js";
+import { StarveEmOutState } from "./StarveEmOutState.js";
+import { FoodCacheState } from "./FoodCacheState.js";
+import { MillersDaughterState } from "./MillersDaughterState.js";
+import { MasterSmithState } from "./MasterSmithState.js";
+import { CallToArmsState } from "./CallToArmsState.js";
+import { DeedOfValorState } from "./DeedOfValorState.js";
+import { ReinforcementsState } from "./ReinforcementsState.js";
 import { NeutralState } from "./NeutralState.js";
 
 function newState(boardState, isActive, ChangeTo, ElseState) {
@@ -72,7 +70,7 @@ export const library = {
 		cardText3: "",
 		cardText4: ""
 	},
-	loot: {
+	withdraw: {
 		cost: 3,
 		name: "Loot",
 		name2: null,

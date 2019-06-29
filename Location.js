@@ -3,7 +3,8 @@ import { Store } from "./Store.js";
 import { NeutralState } from "./NeutralState.js";
 import { AttackState } from "./AttackState.js";
 import { locations } from "./BoardState.js";
-import { ReinforcementsState } from "./TurnStates.js";
+import { ReinforcementsState } from "./ReinforcementsState.js";
+import { BuyLoyaltyState } from "./BuyLoyaltyState.js";
 
 export class Location {
 	constructor(x, y, name, store1, store2, store3, store4) {
@@ -27,6 +28,16 @@ export class Location {
 		this._defensiveCards = [];
 		this._defensivePower = 0;
 		this._activeCards = [];
+		this._loyalty = [];
+		this._buying = false;
+	}
+
+	get buying() {
+		return this._buying;
+	}
+
+	get loyalty() {
+		return this._loyalty;
 	}
 
 	get controlledBy() {
@@ -144,6 +155,12 @@ export class Location {
 
 	canUse(player) {
 		if (this._controlledBy == player) return true;
+		// for (let i = 0; i < players.length; ++i) {
+		// 	for (let j = 0; j < this._loyalty.length; ++j) {
+		// 		if (players[i].playerNumber === this._loyalty[j]) return true;
+		// 	}
+		// }
+		// TODO: FIND PLAYERS
 	}
 
 	onHover(x, y) {
@@ -173,7 +190,7 @@ export class Location {
 
 	onClick(x, y, state) {
 		this.activateCard(x, y);
-		if (state.turnState instanceof NeutralState) {
+		if (this.controlledBy !== state.currentPlayer) {
 			if (this._box.contains(x, y)) {
 				this._underAttack = toggle(this._underAttack);
 				state.currentPlayer.deactivateCards();
@@ -181,7 +198,7 @@ export class Location {
 			} else if (
 				this._storesVisible &&
 				this._storeBox.contains(x, y) &&
-				state._currentPlayer == this._controlledBy
+				this.canUse(this.currentPlayer)
 			) {
 				for (let store of this._stores) {
 					store.onClick(x, y, state);
@@ -194,6 +211,13 @@ export class Location {
 				} else {
 					locations[i]._underAttack = toggle(this._underAttack);
 				}
+			}
+		} else if (this._box.contains(x, y)) {
+			this._buying = toggle(this._buying);
+			if (this._buying) {
+				state.turnState = new BuyLoyaltyState(state);
+			} else {
+				state.turnState = new NeutralState(state);
 			}
 		}
 	}
@@ -255,6 +279,9 @@ export class Location {
 
 		if (this._underAttack) {
 			ctx.fillStyle = "red";
+		}
+		if (this._buying) {
+			ctx.fillStyle = "green";
 		}
 		ctx.fillRect(
 			this._box.left,

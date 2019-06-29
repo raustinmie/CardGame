@@ -4,7 +4,7 @@ import { Store } from "./Store.js";
 import { Location } from "./Location.js";
 import { Button } from "./util.js";
 import { NeutralState } from "./NeutralState.js";
-import { MasterSmithState } from "./TurnStates.js";
+import { MasterSmithState } from "./MasterSmithState.js";
 
 export const locations = [
 	new Location(
@@ -49,7 +49,7 @@ export const stores = [
 	new Store(175, 175, library.angryMob),
 	new Store(575, 175, library.reinforcements),
 	new Store(175, 525, library.oldFarmer),
-	new Store(575, 525, library.loot)
+	new Store(575, 525, library.withdraw)
 ];
 
 export const playerData = [
